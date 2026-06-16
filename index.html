@@ -196,49 +196,55 @@ html, body { height: 100%; background: var(--navy); font-family: -apple-system, 
 /* ── CAMERA ── */
 #cameraOverlay { display:none; position:fixed; inset:0; z-index:200; background:#000; }
 #cameraOverlay.open { display:block; }
-#camVideo { width:100%; height:100%; object-fit:cover; }
+#camVideo { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
 #camCanvas { display:none; }
+.cam-ui { position:absolute; inset:0; display:flex; flex-direction:column; pointer-events:none; }
 
-.cam-ui { position:absolute; inset:0; display:flex; flex-direction:column; }
-.cam-top-mask { background:rgba(0,0,0,0.65); height:calc(var(--safe-top) + 100px); flex-shrink:0; display:flex; align-items:flex-end; padding:12px 16px; }
-.cam-top-row { display:flex; align-items:center; width:100%; }
-.cam-label { flex:1; text-align:center; font-size:14px; font-weight:600; color:#fff; }
-.cam-icon-btn { width:38px; height:38px; background:rgba(0,0,0,0.5); border:none; border-radius:50%; display:flex; align-items:center; justify-content:center; cursor:pointer; backdrop-filter:blur(8px); }
+.cam-top-bar { display:flex; align-items:center; gap:10px; padding:calc(var(--safe-top) + 12px) 14px 14px; background:linear-gradient(to bottom,rgba(0,0,0,0.75) 0%,transparent 100%); pointer-events:all; }
+.cam-top-center { flex:1; text-align:center; }
+.cam-top-title { font-size:15px; font-weight:700; color:#fff; }
+.cam-top-sub { font-size:11px; color:rgba(255,255,255,0.6); margin-top:2px; transition:color 0.3s; }
+.cam-icon-btn { width:38px; height:38px; border-radius:50%; border:none; cursor:pointer; background:rgba(0,0,0,0.45); backdrop-filter:blur(10px); display:flex; align-items:center; justify-content:center; flex-shrink:0; }
 .cam-icon-btn svg { width:18px; height:18px; stroke:#fff; fill:none; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
-.cam-icon-btn.torch-on { background:rgba(240,165,0,0.7); }
+.cam-icon-btn.torch-on { background:rgba(240,165,0,0.75); }
+.cam-icon-btn.torch-on svg { stroke:var(--navy); }
 
-.cam-mid { display:flex; flex:1; min-height:0; }
-.cam-side-mask { background:rgba(0,0,0,0.65); width:18px; flex-shrink:0; }
-.cam-window {
-  flex:1; position:relative;
-  border:2px solid rgba(255,255,255,0.8); border-radius:10px;
-  overflow:hidden;
-}
-.cam-corners::before, .cam-corners::after {
-  content:''; position:absolute; width:24px; height:24px; border-color:var(--gold); border-style:solid;
-}
-.cam-corners::before { top:-1px; left:-1px; border-width:3px 0 0 3px; border-radius:3px 0 0 0; }
-.cam-corners::after { bottom:-1px; right:-1px; border-width:0 3px 3px 0; border-radius:0 0 3px 0; }
-.cam-scan-line {
-  position:absolute; left:0; right:0; height:2px;
-  background:linear-gradient(90deg,transparent,var(--gold),transparent);
-  box-shadow:0 0 8px var(--gold);
-  animation:scanline 2s ease-in-out infinite;
-}
-@keyframes scanline { 0%{top:8%} 50%{top:88%} 100%{top:8%} }
+.cam-scan-zone { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:14px; padding:0 16px; }
+.cam-scan-window { width:100%; height:88px; position:relative; border-radius:8px; box-shadow:0 0 0 4000px rgba(0,0,0,0.58); transition:box-shadow 0.3s; }
+.cam-scan-window.flash { box-shadow:0 0 0 4000px rgba(0,0,0,0.3), 0 0 30px 6px rgba(240,165,0,0.6); }
+.cam-scan-window.success { box-shadow:0 0 0 4000px rgba(0,0,0,0.58), 0 0 0 2px var(--teal); }
 
-.cam-bot-mask { background:rgba(0,0,0,0.65); padding:20px 16px calc(var(--safe-bot) + 20px); display:flex; flex-direction:column; align-items:center; gap:12px; }
-.cam-hint { font-size:13px; color:rgba(255,255,255,0.75); text-align:center; }
-.cam-shutter { width:72px; height:72px; border-radius:50%; background:#fff; border:4px solid rgba(255,255,255,0.35); cursor:pointer; display:flex; align-items:center; justify-content:center; }
-.cam-shutter svg { width:32px; height:32px; stroke:var(--navy); fill:none; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
-.cam-shutter:active { transform:scale(0.92); }
+.cam-corner { position:absolute; width:20px; height:20px; }
+.cam-corner::before,.cam-corner::after { content:''; position:absolute; background:var(--gold); border-radius:1px; }
+.cam-corner.tl { top:0; left:0; } .cam-corner.tl::before { top:0;left:0;width:100%;height:3px; } .cam-corner.tl::after { top:0;left:0;width:3px;height:100%; }
+.cam-corner.tr { top:0; right:0; } .cam-corner.tr::before { top:0;right:0;width:100%;height:3px; } .cam-corner.tr::after { top:0;right:0;width:3px;height:100%; }
+.cam-corner.bl { bottom:0; left:0; } .cam-corner.bl::before { bottom:0;left:0;width:100%;height:3px; } .cam-corner.bl::after { bottom:0;left:0;width:3px;height:100%; }
+.cam-corner.br { bottom:0; right:0; } .cam-corner.br::before { bottom:0;right:0;width:100%;height:3px; } .cam-corner.br::after { bottom:0;right:0;width:3px;height:100%; }
 
-.cam-processing { display:none; position:absolute; inset:0; background:rgba(0,0,0,0.8); flex-direction:column; align-items:center; justify-content:center; gap:14px; z-index:10; }
+.cam-scan-line { position:absolute; left:0; right:0; height:2px; z-index:1; background:linear-gradient(90deg,transparent 0%,rgba(240,165,0,0.3) 20%,var(--gold) 50%,rgba(240,165,0,0.3) 80%,transparent 100%); box-shadow:0 0 10px var(--gold), 0 0 4px var(--gold); animation:scanline 2.2s ease-in-out infinite; }
+@keyframes scanline { 0%{top:5%} 50%{top:88%} 100%{top:5%} }
+
+.cam-zone-label { font-size:12px; color:rgba(255,255,255,0.5); text-align:center; }
+
+.cam-bottom-bar { display:flex; flex-direction:column; align-items:center; gap:12px; padding:14px 14px calc(var(--safe-bot) + 20px); background:linear-gradient(to top,rgba(0,0,0,0.75) 0%,transparent 100%); pointer-events:all; }
+.cam-tip-chips { display:flex; gap:8px; justify-content:center; flex-wrap:wrap; }
+.cam-chip { font-size:11px; padding:5px 11px; border-radius:20px; background:rgba(255,255,255,0.08); color:rgba(255,255,255,0.4); border:0.5px solid rgba(255,255,255,0.12); transition:all 0.4s; }
+.cam-chip.active { background:rgba(240,165,0,0.18); color:var(--gold); border-color:rgba(240,165,0,0.35); }
+
+.cam-shutter { width:74px; height:74px; border-radius:50%; border:none; cursor:pointer; background:none; position:relative; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+.cam-shutter:active .cam-shutter-dot { transform:scale(0.87); }
+.cam-shutter-ring { position:absolute; inset:0; border-radius:50%; border:3px solid rgba(255,255,255,0.7); }
+.cam-shutter-dot { width:58px; height:58px; border-radius:50%; background:#fff; transition:transform 0.1s; }
+.cam-attempts { font-size:12px; color:rgba(255,255,255,0.45); min-height:16px; }
+
+.cam-processing { display:none; position:absolute; inset:0; z-index:20; background:rgba(0,0,0,0.82); backdrop-filter:blur(4px); align-items:center; justify-content:center; }
 .cam-processing.show { display:flex; }
-.proc-ring { width:52px; height:52px; border-radius:50%; border:3px solid rgba(255,255,255,0.15); border-top-color:var(--gold); animation:spin 0.8s linear infinite; }
+.cam-proc-inner { display:flex; flex-direction:column; align-items:center; gap:12px; padding:28px 24px; background:rgba(255,255,255,0.06); border:0.5px solid rgba(255,255,255,0.1); border-radius:20px; width:240px; }
+.proc-ring { width:44px; height:44px; border-radius:50%; border:3px solid rgba(255,255,255,0.1); border-top-color:var(--gold); animation:spin 0.7s linear infinite; }
 @keyframes spin { to{transform:rotate(360deg)} }
-.proc-label { color:#fff; font-size:16px; font-weight:600; }
-.proc-sub { color:rgba(255,255,255,0.5); font-size:13px; text-align:center; padding:0 32px; }
+.proc-label { font-size:15px; font-weight:700; color:#fff; text-align:center; }
+.proc-sub { font-size:11px; color:rgba(255,255,255,0.5); text-align:center; line-height:1.5; }
+.proc-attempts { font-size:11px; color:rgba(255,255,255,0.35); text-align:center; }
 
 /* ── CONFIRM MODAL ── */
 #confirmModal { display:none; position:fixed; inset:0; z-index:300; background:rgba(0,0,0,0.7); align-items:flex-end; backdrop-filter:blur(6px); }
@@ -547,36 +553,57 @@ html, body { height: 100%; background: var(--navy); font-family: -apple-system, 
 <div id="cameraOverlay">
   <video id="camVideo" playsinline autoplay muted></video>
   <canvas id="camCanvas" style="display:none;"></canvas>
+
   <div class="cam-ui">
-    <div class="cam-top-mask">
-      <div class="cam-top-row">
-        <button class="cam-icon-btn" onclick="closeCamera()">
-          <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-        </button>
-        <div class="cam-label">Align VIN text in box</div>
-        <button class="cam-icon-btn" id="torchBtn" onclick="toggleTorch()">
-          <svg viewBox="0 0 24 24"><path d="M9 2h6l-1 7h-4L9 2z"/><path d="M10 9l-4 13h12L14 9"/></svg>
-        </button>
+    <!-- Top bar -->
+    <div class="cam-top-bar">
+      <button class="cam-icon-btn" onclick="closeCamera()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+      <div class="cam-top-center">
+        <div class="cam-top-title">Scan VIN</div>
+        <div class="cam-top-sub" id="camGuideText">Point at VIN text</div>
       </div>
-    </div>
-    <div class="cam-mid">
-      <div class="cam-side-mask"></div>
-      <div class="cam-window cam-corners">
-        <div class="cam-scan-line"></div>
-      </div>
-      <div class="cam-side-mask"></div>
-    </div>
-    <div class="cam-bot-mask">
-      <div class="cam-hint">Works on door jamb · dash · sticker · paper · title</div>
-      <button class="cam-shutter" onclick="captureFrame()">
-        <svg viewBox="0 0 24 24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+      <button class="cam-icon-btn" id="torchBtn" onclick="toggleTorch()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 2h6l-1 7h-4L9 2z"/><path d="M10 9l-4 13h12L14 9"/></svg>
       </button>
     </div>
+
+    <!-- Scan window — wide and short, sized for a VIN row -->
+    <div class="cam-scan-zone">
+      <div class="cam-scan-window" id="camScanWindow">
+        <div class="cam-corner tl"></div>
+        <div class="cam-corner tr"></div>
+        <div class="cam-corner bl"></div>
+        <div class="cam-corner br"></div>
+        <div class="cam-scan-line"></div>
+      </div>
+      <div class="cam-zone-label">Align VIN text row inside box — get close</div>
+    </div>
+
+    <!-- Bottom controls -->
+    <div class="cam-bottom-bar">
+      <div class="cam-tip-chips" id="camTips">
+        <div class="cam-chip active" id="chip0">4–6 inches away</div>
+        <div class="cam-chip" id="chip1">Hold steady</div>
+        <div class="cam-chip" id="chip2">Use torch if dark</div>
+      </div>
+      <button class="cam-shutter" id="camShutter" onclick="captureFrame()">
+        <div class="cam-shutter-ring"></div>
+        <div class="cam-shutter-dot"></div>
+      </button>
+      <div class="cam-attempts" id="camAttempts" style="visibility:hidden;">Tap to scan</div>
+    </div>
   </div>
+
+  <!-- Processing overlay -->
   <div class="cam-processing" id="camProc">
-    <div class="proc-ring"></div>
-    <div class="proc-label" id="procLabel">Reading VIN…</div>
-    <div class="proc-sub">Hold still — analyzing text</div>
+    <div class="cam-proc-inner">
+      <div class="proc-ring"></div>
+      <div class="proc-label" id="procLabel">Analyzing image…</div>
+      <div class="proc-sub" id="procSub">Claude Vision is reading the VIN</div>
+      <div class="proc-attempts" id="procAttempts"></div>
+    </div>
   </div>
 </div>
 
@@ -633,18 +660,29 @@ function onVinInput() {
 
 // ── Camera ──
 async function openCamera() {
+  scanAttempts = 0;
+  const attemptsEl = document.getElementById('camAttempts');
+  if (attemptsEl) { attemptsEl.style.visibility = 'hidden'; attemptsEl.textContent = ''; }
+  const guide = document.getElementById('camGuideText');
+  if (guide) { guide.textContent = 'Point at VIN text'; guide.style.color = ''; }
   try {
     camStream = await navigator.mediaDevices.getUserMedia({
-      video: { facingMode:{ideal:'environment'}, width:{ideal:1920}, height:{ideal:1080} }
+      video: {
+        facingMode: { ideal: 'environment' },
+        width: { ideal: 3840 }, height: { ideal: 2160 }, // request max resolution
+        focusMode: 'continuous'
+      }
     });
     document.getElementById('camVideo').srcObject = camStream;
     await document.getElementById('camVideo').play();
     document.getElementById('cameraOverlay').classList.add('open');
+    startTipRotation();
   } catch(e) {
-    showToast(e.name === 'NotAllowedError' ? 'Camera denied — check Settings > Safari > Camera' : 'Camera unavailable');
+    showToast(e.name === 'NotAllowedError' ? 'Camera denied — check Settings > Safari > Camera' : 'Camera unavailable: ' + e.message);
   }
 }
 function closeCamera() {
+  stopTipRotation();
   if (camStream) { camStream.getTracks().forEach(t=>t.stop()); camStream=null; }
   torchOn=false;
   document.getElementById('torchBtn').classList.remove('torch-on');
@@ -661,87 +699,208 @@ async function toggleTorch() {
   } catch(e) { torchOn=false; showToast('Torch unavailable'); }
 }
 
-// ── Capture & Claude Vision OCR ──
+// ── Advanced Camera OCR ──
+let scanAttempts = 0;
+let tipTimer = null;
+
+function startTipRotation() {
+  let i = 0;
+  tipTimer = setInterval(() => {
+    document.querySelectorAll('.cam-chip').forEach((c,j) => c.classList.toggle('active', j === i));
+    i = (i + 1) % 3;
+  }, 2500);
+}
+function stopTipRotation() { clearInterval(tipTimer); }
+
 async function captureFrame() {
   const video = document.getElementById('camVideo');
-  const canvas = document.getElementById('camCanvas');
+  if (!video.videoWidth) { showToast('Camera not ready — wait a moment'); return; }
 
-  // Full resolution capture
-  canvas.width = video.videoWidth || 1280;
-  canvas.height = video.videoHeight || 720;
+  scanAttempts++;
+  const attemptsEl = document.getElementById('camAttempts');
+  attemptsEl.style.visibility = 'visible';
+  attemptsEl.textContent = `Attempt ${scanAttempts}`;
+
+  // Flash the scan window
+  const win = document.getElementById('camScanWindow');
+  win.classList.add('flash');
+  setTimeout(() => win.classList.remove('flash'), 350);
+
+  // Grab full resolution frame
+  const canvas = document.getElementById('camCanvas');
+  canvas.width = video.videoWidth;
+  canvas.height = video.videoHeight;
   const ctx = canvas.getContext('2d');
   ctx.drawImage(video, 0, 0);
 
-  // Crop to the scan window area (middle horizontal strip, full width)
-  // This matches the visible scan window in the camera UI
-  const cropX = 0;
-  const cropY = Math.floor(canvas.height * 0.25);
-  const cropW = canvas.width;
-  const cropH = Math.floor(canvas.height * 0.50);
-
-  const crop = document.createElement('canvas');
-  crop.width = cropW;
-  crop.height = cropH;
-  const cctx = crop.getContext('2d');
-  cctx.drawImage(canvas, cropX, cropY, cropW, cropH, 0, 0, cropW, cropH);
-
-  // Convert to base64 JPEG at high quality
-  const base64 = crop.toDataURL('image/jpeg', 0.95).split(',')[1];
-
   document.getElementById('camProc').classList.add('show');
-  document.getElementById('procLabel').textContent = 'Scanning VIN…';
+  updateProcStatus('Analyzing image…', 'Sending to Claude Vision');
 
+  // Generate 4 image variants to maximize read accuracy
+  const variants = await generateVariants(canvas);
+
+  // Try each variant, stop at first confident result
+  let bestVin = null;
+  let variantNames = ['Original', 'Brightened', 'High contrast', 'Inverted'];
+
+  for (let i = 0; i < variants.length; i++) {
+    updateProcStatus(`Reading VIN… (${i+1}/${variants.length})`, `Trying ${variantNames[i]} image`);
+    document.getElementById('procAttempts').textContent = `Attempt ${scanAttempts} · Variant ${i+1} of ${variants.length}`;
+
+    const result = await readVinWithVision(variants[i]);
+    if (result && result.length >= 11) {
+      // Validate — real VINs start with a WMI (position 1 is a letter, not 0-9)
+      if (/^[A-HJ-NPR-Z]/.test(result)) {
+        bestVin = result;
+        break;
+      } else if (!bestVin) {
+        bestVin = result; // Keep as fallback even if WMI looks off
+      }
+    }
+  }
+
+  document.getElementById('camProc').classList.remove('show');
+
+  if (bestVin) {
+    win.classList.add('success');
+    setTimeout(() => win.classList.remove('success'), 1000);
+    showConfirmModal(bestVin);
+  } else {
+    // Give contextual guidance after failures
+    const guide = document.getElementById('camGuideText');
+    if (scanAttempts === 1) {
+      guide.textContent = 'Move closer — fill the box with the VIN row';
+      guide.style.color = 'var(--gold)';
+    } else if (scanAttempts === 2) {
+      guide.textContent = 'Try the torch button for better contrast';
+      guide.style.color = 'var(--gold)';
+    } else {
+      guide.textContent = 'Tilt slightly to reduce glare if on a sticker';
+      guide.style.color = 'var(--gold)';
+    }
+    showToast('No VIN found — adjust and try again');
+  }
+}
+
+// Generate 4 preprocessed variants of the scan zone
+async function generateVariants(sourceCanvas) {
+  // Crop to scan window zone (middle 50% height, full width with small padding)
+  const sx = Math.floor(sourceCanvas.width * 0.02);
+  const sy = Math.floor(sourceCanvas.height * 0.25);
+  const sw = Math.floor(sourceCanvas.width * 0.96);
+  const sh = Math.floor(sourceCanvas.height * 0.50);
+
+  // Upscale 2x for better OCR
+  const W = sw * 2, H = sh * 2;
+
+  function makeCanvas() {
+    const c = document.createElement('canvas');
+    c.width = W; c.height = H;
+    return c;
+  }
+
+  function drawCrop(c) {
+    const ctx = c.getContext('2d');
+    ctx.imageSmoothingEnabled = true;
+    ctx.imageSmoothingQuality = 'high';
+    ctx.drawImage(sourceCanvas, sx, sy, sw, sh, 0, 0, W, H);
+    return ctx;
+  }
+
+  // Variant 1: Original (slightly sharpened)
+  const c1 = makeCanvas(); drawCrop(c1);
+
+  // Variant 2: Brightened (+60 brightness, useful for dark door jambs)
+  const c2 = makeCanvas(); const ctx2 = drawCrop(c2);
+  const id2 = ctx2.getImageData(0,0,W,H);
+  adjustPixels(id2.data, { brightness: 60, contrast: 20 });
+  ctx2.putImageData(id2,0,0);
+
+  // Variant 3: High contrast grayscale (good for printed stickers)
+  const c3 = makeCanvas(); const ctx3 = drawCrop(c3);
+  const id3 = ctx3.getImageData(0,0,W,H);
+  adjustPixels(id3.data, { grayscale: true, contrast: 80 });
+  ctx3.putImageData(id3,0,0);
+
+  // Variant 4: Inverted high contrast (for light text on dark backgrounds)
+  const c4 = makeCanvas(); const ctx4 = drawCrop(c4);
+  const id4 = ctx4.getImageData(0,0,W,H);
+  adjustPixels(id4.data, { grayscale: true, contrast: 80, invert: true });
+  ctx4.putImageData(id4,0,0);
+
+  return [c1,c2,c3,c4].map(c => c.toDataURL('image/jpeg', 0.92).split(',')[1]);
+}
+
+function adjustPixels(data, opts={}) {
+  for (let i=0; i<data.length; i+=4) {
+    let r=data[i], g=data[i+1], b=data[i+2];
+    if (opts.grayscale) { r=g=b=Math.round(0.299*r+0.587*g+0.114*b); }
+    if (opts.brightness) { r=clamp(r+opts.brightness); g=clamp(g+opts.brightness); b=clamp(b+opts.brightness); }
+    if (opts.contrast) {
+      const f = (259*(opts.contrast+255))/(255*(259-opts.contrast));
+      r=clamp(f*(r-128)+128); g=clamp(f*(g-128)+128); b=clamp(f*(b-128)+128);
+    }
+    if (opts.invert) { r=255-r; g=255-g; b=255-b; }
+    data[i]=r; data[i+1]=g; data[i+2]=b;
+  }
+}
+function clamp(v){ return Math.max(0,Math.min(255,Math.round(v))); }
+
+async function readVinWithVision(base64) {
   try {
     const response = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         model: 'claude-sonnet-4-6',
-        max_tokens: 100,
+        max_tokens: 60,
         messages: [{
           role: 'user',
           content: [
-            {
-              type: 'image',
-              source: { type: 'base64', media_type: 'image/jpeg', data: base64 }
-            },
-            {
-              type: 'text',
-              text: `Find the Vehicle Identification Number (VIN) in this image.
+            { type:'image', source:{ type:'base64', media_type:'image/jpeg', data:base64 } },
+            { type:'text', text:`You are reading a Vehicle Identification Number (VIN) from a photo taken in a car dealership. The photo may show a door jamb sticker, dashboard plate, window sticker, title document, or any printed label.
 
-A VIN is exactly 17 characters. Valid characters are: A-H, J-N, P-R, S-Z, and 0-9.
-The letters I, O, and Q are NEVER used in a VIN.
-The VIN may appear on a sticker, label, dashboard plate, door jamb, title document, or window sticker.
-It is often printed in a monospace font, sometimes with hyphens or spaces separating groups.
+STRICT VIN RULES:
+- Exactly 17 characters long
+- Only these characters are valid: A B C D E F G H J K L M N P R S T U V W X Y Z 0 1 2 3 4 5 6 7 8 9
+- The letters I, O, Q are NEVER in a VIN — if you see them, they are misreads:
+  • I → 1
+  • O → 0  
+  • Q → 0
+- Position 1 is always a letter (country of manufacture)
+- Position 9 is a check digit (0-9 or X)
+- VINs often appear with spaces or dashes every few characters on stickers — ignore separators
 
-Rules:
-- Remove any spaces, hyphens, or separators
-- Convert any ambiguous characters: letter O → digit 0, letter I → digit 1, letter Q → digit 0
-- Return only the 17-character VIN, nothing else
-- If you cannot find a VIN, return exactly: NONE`
-            }
+COMMON MISREADS TO CORRECT:
+- B vs 8 — look at curves
+- D vs 0 — D has a flat edge
+- S vs 5 — context of surrounding chars
+- Z vs 2 — look carefully
+- G vs 6 — G has a horizontal bar
+- U vs 0 — U is open at bottom
+
+INSTRUCTIONS:
+1. Scan the entire image for any 17-character alphanumeric sequence
+2. The VIN may be labeled "VIN:", "V.I.N.", or have no label
+3. Remove all spaces, dashes, and separators
+4. Apply all character corrections above
+5. Return ONLY the 17-character VIN — no other text, no explanation
+6. If you truly cannot find a VIN, return: NONE` }
           ]
         }]
       })
     });
-
     const data = await response.json();
-    const raw = (data.content?.[0]?.text || '').trim().toUpperCase();
-    const cleaned = raw.replace(/[^A-HJ-NPR-Z0-9]/g, '');
+    const raw = (data.content?.[0]?.text || '').trim().toUpperCase().replace(/[^A-HJ-NPR-Z0-9]/g,'');
+    return raw === 'NONE' || raw.length === 0 ? null : raw.slice(0,17);
+  } catch(e) { return null; }
+}
 
-    document.getElementById('camProc').classList.remove('show');
-
-    if (cleaned === 'NONE' || cleaned.length === 0) {
-      showToast('No VIN found — move closer and tap again');
-    } else {
-      showConfirmModal(cleaned);
-    }
-
-  } catch(e) {
-    document.getElementById('camProc').classList.remove('show');
-    showToast('Could not read — check your connection and try again');
-    console.error('Vision OCR error:', e);
-  }
+function updateProcStatus(label, sub) {
+  const l = document.getElementById('procLabel');
+  const s = document.getElementById('procSub');
+  if (l) l.textContent = label;
+  if (s) s.textContent = sub;
 }
 
 // ── Confirm modal ──
