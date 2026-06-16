@@ -936,35 +936,123 @@ async function doLookup() {
   if (vin.length < 11) return;
   showTab('loading');
   startSteps();
-  try {
-    const res = await fetch('https://api.anthropic.com/v1/messages', {
-      method:'POST', headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({
-        model:'claude-sonnet-4-6', max_tokens:1400,
-        system:`You are an automotive data expert at Keller Ford & Keller Used Cars, Hanford CA. Decode VINs accurately using real VIN position rules. Return ONLY valid JSON, no markdown.
-Dealer sites: kellerfordhanford.com and kellerusedcar.com.
-Always set listing_url to: https://www.google.com/search?q=site:kellerusedcar.com+OR+site:kellerfordhanford.com+"${vin}"`,
-        messages:[{role:'user',content:`Decode VIN: ${vin}
 
-Return this exact JSON with accurate decoded values and realistic market data:
+  let errorDetail = '';
+
+  try {
+    // Step 1 — Call NHTSA free VIN decode API (no auth needed, always works)
+    setStep(0);
+    let nhtsaData = {};
+    try {
+      const nhtsaRes = await fetch(`https://vpic.nhtsa.dot.gov/api/vehicles/decodevin/${vin}?format=json`);
+      const nhtsaJson = await nhtsaRes.json();
+      if (nhtsaJson.Results) {
+        for (const r of nhtsaJson.Results) {
+          if (r.Value && r.Value !== 'Not Applicable' && r.Value !== '0') {
+            nhtsaData[r.Variable] = r.Value;
+          }
+        }
+      }
+    } catch(e) {
+      // NHTSA failed — not fatal, Claude will still decode from VIN pattern
+      console.warn('NHTSA lookup failed:', e);
+    }
+
+    // Step 2 — Send VIN + NHTSA data to Claude for full vehicle profile
+    setStep(1);
+    const nhtsaSummary = Object.keys(nhtsaData).length > 0
+      ? `NHTSA decode data: ${JSON.stringify(nhtsaData)}`
+      : 'NHTSA data unavailable — decode from VIN structure directly.';
+
+    const searchUrl = `https://www.google.com/search?q=site:kellerusedcar.com+OR+site:kellerfordhanford.com+"${vin}"`;
+
+    const requestBody = {
+      model: 'claude-sonnet-4-6',
+      max_tokens: 1400,
+      system: 'You are an automotive data expert at Keller Ford & Keller Used Cars in Hanford CA. You decode VINs and generate vehicle profiles. Always respond with valid JSON only — no markdown fences, no explanation, no text before or after the JSON object.',
+      messages: [{
+        role: 'user',
+        content: `Decode this VIN and return a complete vehicle profile as a JSON object.
+
+VIN: ${vin}
+${nhtsaSummary}
+
+Return ONLY this JSON structure, filled in accurately:
 {
-  "vin":"${vin}","year":"","make":"","model":"","trim":"","body":"","engine":"","drivetrain":"","transmission":"","exterior_color":"See sticker","interior_color":"See sticker","mileage":"Check odometer","sale_price":"See sticker","retail_price":"","stock":"","owners":1,"website":"kellerusedcar.com",
-  "listing_url":"https://www.google.com/search?q=site:kellerusedcar.com+OR+site:kellerfordhanford.com+%22${vin}%22",
-  "badges":["Keller Inventory"],
-  "features":["Feature 1","Feature 2","Feature 3","Feature 4","Feature 5","Feature 6"],
-  "dealer_comment":"",
-  "pitch":"Confident natural 2-3 sentence salesperson pitch mentioning year, model, trim, a standout feature, and an invitation to get inside.",
-  "comparables":[
-    {"name":"Similar vehicle 1","miles":"XX,XXX mi","price":"$XX,XXX","delta":"lower"},
-    {"name":"Similar vehicle 2","miles":"XX,XXX mi","price":"$XX,XXX","delta":"higher"},
-    {"name":"Similar vehicle 3","miles":"XX,XXX mi","price":"$XX,XXX","delta":"same"}
+  "vin": "${vin}",
+  "year": "decoded model year",
+  "make": "manufacturer",
+  "model": "model name",
+  "trim": "trim level if determinable, else blank",
+  "body": "body style e.g. SuperCrew Pickup, SUV, Sedan",
+  "engine": "engine description e.g. 5.0L V8",
+  "drivetrain": "AWD / FWD / RWD / 4WD",
+  "transmission": "Automatic or Manual + speeds if known",
+  "exterior_color": "See window sticker",
+  "interior_color": "See window sticker",
+  "mileage": "Check odometer",
+  "sale_price": "See window sticker",
+  "retail_price": "",
+  "stock": "",
+  "owners": 1,
+  "website": "kellerusedcar.com",
+  "listing_url": "${searchUrl}",
+  "badges": ["Keller Inventory"],
+  "features": [
+    "list 6 to 8 real standard features for this trim level"
+  ],
+  "dealer_comment": "",
+  "pitch": "Write a confident natural 2-3 sentence salesperson pitch. Mention the year, make, model, trim, one standout feature, and invite the customer to get inside and see it for themselves.",
+  "comparables": [
+    {"name": "year make model trim", "miles": "XX,XXX mi", "price": "$XX,XXX", "delta": "lower"},
+    {"name": "year make model trim", "miles": "XX,XXX mi", "price": "$XX,XXX", "delta": "higher"},
+    {"name": "year make model trim", "miles": "XX,XXX mi", "price": "$XX,XXX", "delta": "same"}
   ]
-}`}]
-      })
+}`
+      }]
+    };
+
+    setStep(2);
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(requestBody)
     });
+
+    // Check HTTP status before trying to parse
+    if (!res.ok) {
+      const errText = await res.text();
+      errorDetail = `API error ${res.status}: ${errText.slice(0, 200)}`;
+      throw new Error(errorDetail);
+    }
+
     const data = await res.json();
-    const raw = data.content.map(b=>b.text||'').join('').replace(/\`\`\`json|\`\`\`/g,'').trim();
-    const vehicle = JSON.parse(raw);
+
+    // Check for API-level error in response body
+    if (data.error) {
+      errorDetail = `API returned error: ${data.error.type} — ${data.error.message}`;
+      throw new Error(errorDetail);
+    }
+
+    if (!data.content || !data.content.length) {
+      errorDetail = 'API returned empty response — no content block';
+      throw new Error(errorDetail);
+    }
+
+    setStep(3);
+    const raw = data.content.map(b => b.text || '').join('').trim();
+
+    // Strip any accidental markdown fences
+    const cleaned = raw.replace(/^```(?:json)?/i, '').replace(/```$/,'').trim();
+
+    let vehicle;
+    try {
+      vehicle = JSON.parse(cleaned);
+    } catch(parseErr) {
+      errorDetail = `JSON parse failed. Raw response was: ${raw.slice(0, 300)}`;
+      throw new Error(errorDetail);
+    }
+
     cv = vehicle;
     stopSteps();
     saveHistory(vehicle);
@@ -972,14 +1060,21 @@ Return this exact JSON with accurate decoded values and realistic market data:
     renderMarket(vehicle);
     document.getElementById('tab-result').style.display = 'flex';
     showTab('result');
+
   } catch(e) {
     stopSteps();
+    console.error('doLookup error:', e);
+
+    // Show the REAL error so we know what's happening
+    const displayError = errorDetail || e.message || String(e);
+
     document.getElementById('resultContent').innerHTML = `
       <div style="padding:20px 14px;">
         <div class="err-card">
-          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-          <strong>Could Not Decode VIN</strong>
-          <p>Check the VIN has exactly 17 characters with no I, O, or Q.<br><br><code style="font-size:11px;font-family:monospace;color:var(--w50)">${document.getElementById('vinInput').value}</code></p>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          <strong>Lookup Failed</strong>
+          <p style="margin-bottom:10px;">VIN entered: <code style="font-family:monospace;font-size:12px;color:var(--gold)">${vin}</code></p>
+          <p style="font-size:12px;color:var(--w30);text-align:left;background:rgba(255,255,255,0.04);padding:10px;border-radius:8px;word-break:break-word;line-height:1.6;margin-bottom:14px;">${displayError}</p>
           <button class="btn-try-again" onclick="showTab('scan')">Try Again</button>
         </div>
       </div>`;
