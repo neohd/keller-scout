@@ -6,287 +6,488 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Keller Scout">
-<meta name="theme-color" content="#003087">
+<meta name="theme-color" content="#0a0f1e">
 <link rel="apple-touch-icon" href="icons/icon-192.png">
 <link rel="manifest" href="manifest.json">
 <title>Keller Scout</title>
 <style>
 :root {
-  --ford-blue: #003087;
-  --accent: #f0a500;
-  --red: #c0392b;
-  --green: #1a7a4a;
-  --green-light: #e6f4ec;
-  --blue-light: #e8f0fc;
-  --gray0: #f5f5f7;
-  --gray1: #e8e8ed;
-  --gray2: #c7c7cc;
-  --gray3: #8e8e93;
-  --text: #1c1c1e;
-  --sub: #6b6b6e;
-  --card: #ffffff;
+  --navy: #0a0f1e;
+  --navy2: #0d1628;
+  --navy3: #111827;
+  --navy4: #1a2540;
+  --gold: #f0a500;
+  --gold-dim: rgba(240,165,0,0.15);
+  --gold-text: #f0a500;
+  --teal: #3dcca0;
+  --teal-dim: rgba(61,204,160,0.15);
+  --blue: #4a90d9;
+  --blue-dim: rgba(74,144,217,0.15);
+  --red: #e05a5a;
+  --red-dim: rgba(224,90,90,0.15);
+  --white: #ffffff;
+  --w90: rgba(255,255,255,0.9);
+  --w70: rgba(255,255,255,0.7);
+  --w50: rgba(255,255,255,0.5);
+  --w30: rgba(255,255,255,0.3);
+  --w15: rgba(255,255,255,0.15);
+  --w08: rgba(255,255,255,0.08);
+  --w05: rgba(255,255,255,0.05);
+  --border: rgba(255,255,255,0.1);
+  --border-strong: rgba(255,255,255,0.18);
   --safe-top: env(safe-area-inset-top);
   --safe-bot: env(safe-area-inset-bottom);
+  --safe-left: env(safe-area-inset-left);
+  --safe-right: env(safe-area-inset-right);
 }
-@media (prefers-color-scheme: dark) {
-  :root {
-    --blue-light: #1c2f4a; --gray0: #1c1c1e; --gray1: #2c2c2e;
-    --gray2: #48484a; --gray3: #8e8e93; --text: #f2f2f7;
-    --sub: #9a9a9f; --card: #2c2c2e; --green-light: #0f2a1a;
-  }
-}
+
 * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-html, body { height: 100%; background: var(--gray0); font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif; color: var(--text); overflow: hidden; }
-#app { display: flex; flex-direction: column; height: 100%; max-width: 430px; margin: 0 auto; }
+html, body { height: 100%; background: var(--navy); font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif; color: var(--white); overflow: hidden; -webkit-font-smoothing: antialiased; }
+#app { display: flex; flex-direction: column; height: 100%; max-width: 430px; margin: 0 auto; position: relative; }
 
-/* Header */
-.hdr { background: var(--ford-blue); padding: calc(var(--safe-top) + 12px) 16px 14px; display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
-.hdr-logo { width: 32px; height: 32px; background: #fff; border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+/* ── HEADER ── */
+.hdr {
+  background: var(--navy2);
+  border-bottom: 0.5px solid var(--border);
+  padding: calc(var(--safe-top) + 10px) 16px 12px;
+  display: flex; align-items: center; gap: 10px;
+  flex-shrink: 0; position: relative; z-index: 10;
+}
+.hdr-logo {
+  width: 30px; height: 30px;
+  background: var(--gold);
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px; font-weight: 800; color: var(--navy); flex-shrink: 0;
+  letter-spacing: -0.5px;
+}
 .hdr-title { flex: 1; }
-.hdr-title h1 { font-size: 17px; font-weight: 600; color: #fff; }
-.hdr-title p { font-size: 11px; color: rgba(255,255,255,0.65); margin-top: 1px; }
-.hdr-btn { background: rgba(255,255,255,0.15); border: none; border-radius: 8px; padding: 7px 10px; color: #fff; font-size: 12px; font-weight: 500; cursor: pointer; display: flex; align-items: center; gap: 5px; }
+.hdr-title h1 { font-size: 16px; font-weight: 700; color: var(--white); letter-spacing: -0.3px; }
+.hdr-title p { font-size: 10px; color: var(--w50); margin-top: 1px; }
+.hdr-pill {
+  background: var(--w08); border: 0.5px solid var(--border);
+  border-radius: 20px; padding: 6px 11px;
+  font-size: 11px; font-weight: 500; color: var(--w70);
+  cursor: pointer; display: flex; align-items: center; gap: 5px;
+}
+.hdr-pill svg { width: 12px; height: 12px; }
 
-/* Pages */
-.page { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; padding-bottom: calc(var(--safe-bot) + 16px); display: none; }
+/* ── PAGES ── */
+.page { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; display: none; padding-bottom: calc(var(--safe-bot) + 60px); }
 .page.active { display: block; }
-#loading-page.active { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px; padding: 60px 32px; }
+#loading-page.active { display: flex; flex-direction: column; align-items: center; justify-content: center; }
+#result-page.active { display: block; }
 
-/* Scan page */
-.scan-hero { background: var(--ford-blue); padding: 24px 16px 36px; text-align: center; }
-.scan-hero h2 { font-size: 22px; font-weight: 700; color: #fff; margin-bottom: 6px; }
-.scan-hero p { font-size: 14px; color: rgba(255,255,255,0.7); }
-.vin-entry { background: var(--card); border-radius: 16px; padding: 16px; margin: -18px 16px 0; position: relative; z-index: 2; box-shadow: 0 4px 24px rgba(0,0,0,0.1); display: flex; flex-direction: column; gap: 10px; }
-.btn-camera { width: 100%; padding: 18px 16px; background: var(--ford-blue); color: #fff; border: none; border-radius: 14px; font-size: 17px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; }
-.btn-camera:active { opacity: 0.85; }
-.btn-camera svg { width: 22px; height: 22px; }
-.divider { display: flex; align-items: center; gap: 10px; }
-.divider::before, .divider::after { content:''; flex:1; height:1px; background:var(--gray1); }
-.divider span { font-size: 12px; color: var(--gray3); font-weight: 500; }
-.vin-field-wrap { position: relative; }
-.vin-field { width: 100%; padding: 13px 44px 13px 14px; border: 1.5px solid var(--gray1); border-radius: 12px; font-size: 16px; font-family: 'SF Mono','Courier New',monospace; letter-spacing: 0.06em; text-transform: uppercase; background: var(--gray0); color: var(--text); outline: none; }
-.vin-field:focus { border-color: var(--ford-blue); }
-.vin-field::placeholder { font-family: -apple-system,sans-serif; letter-spacing:normal; text-transform:none; font-size:14px; color:var(--gray3); }
-.vin-clear { position:absolute; right:12px; top:50%; transform:translateY(-50%); background:var(--gray2); border:none; border-radius:50%; width:20px; height:20px; display:none; align-items:center; justify-content:center; cursor:pointer; }
-.vin-char-count { font-size: 11px; color: var(--sub); text-align: right; }
-.btn-lookup { width:100%; padding:14px; background:var(--gray1); color:var(--text); border:none; border-radius:12px; font-size:15px; font-weight:600; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:8px; }
-.btn-lookup:not(:disabled) { background: var(--ford-blue); color: #fff; }
-.btn-lookup:disabled { opacity:0.4; cursor:not-allowed; }
+/* ── TAB BAR ── */
+.tabbar {
+  display: flex;
+  background: var(--navy2);
+  border-top: 0.5px solid var(--border);
+  padding: 6px 0 calc(var(--safe-bot) + 6px);
+  flex-shrink: 0; position: relative; z-index: 10;
+}
+.tab { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 3px; cursor: pointer; padding: 4px 0; background: none; border: none; }
+.tab svg { width: 20px; height: 20px; stroke: var(--w30); fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; transition: stroke 0.15s; }
+.tab span { font-size: 9px; color: var(--w30); font-weight: 500; transition: color 0.15s; }
+.tab.active svg { stroke: var(--gold); }
+.tab.active span { color: var(--gold); }
 
-/* Scan tips */
-.scan-tips { padding: 20px 16px 0; }
-.tips-label { font-size:12px; font-weight:600; color:var(--sub); text-transform:uppercase; letter-spacing:0.05em; margin-bottom:10px; }
-.tip-card { background:var(--card); border-radius:12px; padding:14px; display:flex; align-items:center; gap:12px; margin-bottom:8px; }
-.tip-icon { width:36px; height:36px; border-radius:10px; background:var(--blue-light); display:flex; align-items:center; justify-content:center; flex-shrink:0; }
-.tip-icon svg { width:18px; height:18px; color:var(--ford-blue); }
-.tip-text strong { font-size:14px; font-weight:600; display:block; margin-bottom:2px; }
-.tip-text span { font-size:12px; color:var(--sub); }
+/* ── SCAN PAGE ── */
+.scan-gradient {
+  background: linear-gradient(160deg, var(--navy2) 0%, #0d1f3c 100%);
+  padding: 20px 16px 32px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.scan-gradient::before {
+  content: '';
+  position: absolute; top: -40px; left: 50%; transform: translateX(-50%);
+  width: 200px; height: 200px;
+  background: radial-gradient(circle, rgba(240,165,0,0.08) 0%, transparent 70%);
+  pointer-events: none;
+}
+.scan-title { font-size: 24px; font-weight: 800; color: var(--white); letter-spacing: -0.5px; margin-bottom: 5px; }
+.scan-sub { font-size: 13px; color: var(--w50); }
 
-.recently-viewed { padding: 20px 16px 0; }
-.rv-label { font-size:12px; font-weight:600; color:var(--sub); text-transform:uppercase; letter-spacing:0.05em; margin-bottom:10px; }
-.rv-item { background:var(--card); border-radius:12px; padding:12px 14px; display:flex; align-items:center; gap:12px; margin-bottom:8px; cursor:pointer; }
-.rv-info { flex:1; }
-.rv-info strong { font-size:14px; font-weight:600; }
-.rv-info span { font-size:12px; color:var(--sub); display:block; }
-.rv-price { font-size:15px; font-weight:700; color:var(--ford-blue); }
+.vin-card {
+  background: var(--navy3);
+  border: 0.5px solid var(--border);
+  border-radius: 18px;
+  padding: 14px;
+  margin: -16px 14px 0;
+  position: relative; z-index: 2;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+}
+.btn-camera {
+  width: 100%; padding: 16px;
+  background: var(--gold);
+  color: var(--navy); border: none; border-radius: 12px;
+  font-size: 16px; font-weight: 800; cursor: pointer;
+  display: flex; align-items: center; justify-content: center; gap: 9px;
+  letter-spacing: -0.2px;
+}
+.btn-camera:active { opacity: 0.85; transform: scale(0.99); }
+.btn-camera svg { width: 20px; height: 20px; }
 
-/* Camera overlay */
-#cameraOverlay { display:none; position:fixed; inset:0; z-index:100; background:#000; flex-direction:column; }
-#cameraOverlay.open { display:flex; }
+.divider { display: flex; align-items: center; gap: 10px; margin: 10px 0; }
+.divider::before, .divider::after { content:''; flex:1; height:0.5px; background:var(--border); }
+.divider span { font-size: 11px; color: var(--w30); }
+
+.vin-field {
+  width: 100%; padding: 12px 14px;
+  background: var(--w05); border: 0.5px solid var(--border);
+  border-radius: 10px; font-size: 15px;
+  font-family: 'SF Mono','Courier New',monospace;
+  letter-spacing: 0.06em; text-transform: uppercase;
+  color: var(--white); outline: none;
+  transition: border-color 0.15s;
+}
+.vin-field:focus { border-color: var(--gold); }
+.vin-field::placeholder { font-family: -apple-system,sans-serif; letter-spacing:normal; text-transform:none; font-size:13px; color:var(--w30); }
+.vin-row { display: flex; align-items: center; gap: 8px; margin-top: 8px; }
+.vin-count { font-size: 11px; color: var(--w30); flex: 1; }
+.btn-lookup {
+  padding: 11px 20px;
+  background: var(--w08); border: 0.5px solid var(--border);
+  border-radius: 10px; font-size: 14px; font-weight: 700;
+  color: var(--w30); cursor: pointer;
+  display: flex; align-items: center; gap: 7px;
+  transition: all 0.15s;
+}
+.btn-lookup:not(:disabled) { background: var(--navy4); border-color: var(--blue); color: var(--white); }
+.btn-lookup:not(:disabled):active { opacity: 0.8; }
+.btn-lookup:disabled { cursor: not-allowed; }
+.btn-lookup svg { width: 15px; height: 15px; }
+
+/* Section headers */
+.sec-hdr { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; padding: 0 2px; }
+.sec-label { font-size: 11px; font-weight: 700; color: var(--w30); text-transform: uppercase; letter-spacing: 0.07em; }
+.sec-link { font-size: 12px; color: var(--blue); background: none; border: none; cursor: pointer; }
+
+/* Recently viewed */
+.recent-wrap { padding: 20px 14px 0; }
+.rv-item {
+  background: var(--navy3); border: 0.5px solid var(--border);
+  border-radius: 12px; padding: 11px 13px;
+  display: flex; align-items: center; gap: 11px;
+  margin-bottom: 8px; cursor: pointer;
+  transition: border-color 0.15s;
+}
+.rv-item:active { border-color: var(--gold); }
+.rv-dot {
+  width: 36px; height: 26px; background: var(--w05);
+  border-radius: 6px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.rv-dot svg { width: 16px; height: 16px; stroke: var(--w30); fill:none; stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round; }
+.rv-info { flex: 1; min-width: 0; }
+.rv-name { font-size: 13px; font-weight: 600; color: var(--w90); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.rv-sub { font-size: 11px; color: var(--w50); margin-top: 1px; }
+.rv-price { font-size: 13px; font-weight: 700; color: var(--gold); flex-shrink: 0; }
+
+/* Tips */
+.tips-wrap { padding: 18px 14px 0; }
+.tip-row { display: flex; align-items: center; gap: 11px; padding: 10px 13px; background: var(--navy3); border: 0.5px solid var(--border); border-radius: 10px; margin-bottom: 7px; }
+.tip-icon { width: 30px; height: 30px; background: var(--w05); border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.tip-icon svg { width: 15px; height: 15px; stroke: var(--gold); fill:none; stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round; }
+.tip-text strong { font-size: 12px; font-weight: 600; color: var(--w90); display: block; margin-bottom: 1px; }
+.tip-text span { font-size: 11px; color: var(--w50); }
+
+/* ── CAMERA ── */
+#cameraOverlay { display:none; position:fixed; inset:0; z-index:200; background:#000; }
+#cameraOverlay.open { display:block; }
 #camVideo { width:100%; height:100%; object-fit:cover; }
 #camCanvas { display:none; }
-.cam-ui { position:absolute; inset:0; display:flex; flex-direction:column; pointer-events:none; }
-.cam-mask-top { background:rgba(0,0,0,0.6); height:calc(var(--safe-top) + 110px); flex-shrink:0; }
-.cam-mask-bot { background:rgba(0,0,0,0.6); flex:1; display:flex; flex-direction:column; align-items:center; justify-content:flex-start; padding-top:18px; gap:14px; }
-.cam-mask-mid { display:flex; width:100%; }
-.cam-mask-side { background:rgba(0,0,0,0.6); width:16px; flex-shrink:0; }
-.cam-window { flex:1; position:relative; border:2px solid rgba(255,255,255,0.85); border-radius:10px; overflow:hidden; min-height:80px; max-height:100px; }
-.cam-scan-line { position:absolute; left:0; right:0; height:2px; background:linear-gradient(90deg,transparent,var(--accent),transparent); animation:scanline 1.8s ease-in-out infinite; box-shadow:0 0 8px var(--accent); }
-@keyframes scanline { 0%{top:10%} 50%{top:85%} 100%{top:10%} }
-.cam-hint { color:#fff; font-size:14px; font-weight:600; text-align:center; padding:0 24px; pointer-events:none; }
-.cam-hint-sub { color:rgba(255,255,255,0.6); font-size:12px; text-align:center; padding:0 32px; pointer-events:none; }
-.cam-close-btn { position:absolute; top:calc(var(--safe-top) + 12px); left:16px; background:rgba(0,0,0,0.5); border:none; border-radius:50%; width:38px; height:38px; display:flex; align-items:center; justify-content:center; cursor:pointer; backdrop-filter:blur(8px); z-index:10; pointer-events:all; }
-.cam-close-btn svg { width:20px; height:20px; color:#fff; }
-.cam-torch-btn { position:absolute; top:calc(var(--safe-top) + 12px); right:16px; background:rgba(0,0,0,0.5); border:none; border-radius:50%; width:38px; height:38px; display:flex; align-items:center; justify-content:center; cursor:pointer; backdrop-filter:blur(8px); z-index:10; pointer-events:all; }
-.cam-torch-btn svg { width:20px; height:20px; color:#fff; }
-.cam-torch-btn.on { background:rgba(240,165,0,0.8); }
-.cam-capture-btn { width:70px; height:70px; border-radius:50%; background:#fff; border:4px solid rgba(255,255,255,0.4); cursor:pointer; pointer-events:all; display:flex; align-items:center; justify-content:center; }
-.cam-capture-btn svg { width:32px; height:32px; color:var(--ford-blue); }
-.cam-capture-btn:active { transform:scale(0.92); }
-.cam-processing { display:none; position:absolute; inset:0; background:rgba(0,0,0,0.75); flex-direction:column; align-items:center; justify-content:center; gap:14px; z-index:20; }
+
+.cam-ui { position:absolute; inset:0; display:flex; flex-direction:column; }
+.cam-top-mask { background:rgba(0,0,0,0.65); height:calc(var(--safe-top) + 100px); flex-shrink:0; display:flex; align-items:flex-end; padding:12px 16px; }
+.cam-top-row { display:flex; align-items:center; width:100%; }
+.cam-label { flex:1; text-align:center; font-size:14px; font-weight:600; color:#fff; }
+.cam-icon-btn { width:38px; height:38px; background:rgba(0,0,0,0.5); border:none; border-radius:50%; display:flex; align-items:center; justify-content:center; cursor:pointer; backdrop-filter:blur(8px); }
+.cam-icon-btn svg { width:18px; height:18px; stroke:#fff; fill:none; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
+.cam-icon-btn.torch-on { background:rgba(240,165,0,0.7); }
+
+.cam-mid { display:flex; flex:1; min-height:0; }
+.cam-side-mask { background:rgba(0,0,0,0.65); width:18px; flex-shrink:0; }
+.cam-window {
+  flex:1; position:relative;
+  border:2px solid rgba(255,255,255,0.8); border-radius:10px;
+  overflow:hidden;
+}
+.cam-corners::before, .cam-corners::after {
+  content:''; position:absolute; width:24px; height:24px; border-color:var(--gold); border-style:solid;
+}
+.cam-corners::before { top:-1px; left:-1px; border-width:3px 0 0 3px; border-radius:3px 0 0 0; }
+.cam-corners::after { bottom:-1px; right:-1px; border-width:0 3px 3px 0; border-radius:0 0 3px 0; }
+.cam-scan-line {
+  position:absolute; left:0; right:0; height:2px;
+  background:linear-gradient(90deg,transparent,var(--gold),transparent);
+  box-shadow:0 0 8px var(--gold);
+  animation:scanline 2s ease-in-out infinite;
+}
+@keyframes scanline { 0%{top:8%} 50%{top:88%} 100%{top:8%} }
+
+.cam-bot-mask { background:rgba(0,0,0,0.65); padding:20px 16px calc(var(--safe-bot) + 20px); display:flex; flex-direction:column; align-items:center; gap:12px; }
+.cam-hint { font-size:13px; color:rgba(255,255,255,0.75); text-align:center; }
+.cam-shutter { width:72px; height:72px; border-radius:50%; background:#fff; border:4px solid rgba(255,255,255,0.35); cursor:pointer; display:flex; align-items:center; justify-content:center; }
+.cam-shutter svg { width:32px; height:32px; stroke:var(--navy); fill:none; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
+.cam-shutter:active { transform:scale(0.92); }
+
+.cam-processing { display:none; position:absolute; inset:0; background:rgba(0,0,0,0.8); flex-direction:column; align-items:center; justify-content:center; gap:14px; z-index:10; }
 .cam-processing.show { display:flex; }
-.cam-proc-ring { width:52px; height:52px; border-radius:50%; border:3px solid rgba(255,255,255,0.2); border-top-color:var(--accent); animation:spin 0.8s linear infinite; }
-.cam-proc-label { color:#fff; font-size:16px; font-weight:500; }
-.cam-proc-sub { color:rgba(255,255,255,0.6); font-size:13px; text-align:center; padding:0 32px; }
+.proc-ring { width:52px; height:52px; border-radius:50%; border:3px solid rgba(255,255,255,0.15); border-top-color:var(--gold); animation:spin 0.8s linear infinite; }
 @keyframes spin { to{transform:rotate(360deg)} }
+.proc-label { color:#fff; font-size:16px; font-weight:600; }
+.proc-sub { color:rgba(255,255,255,0.5); font-size:13px; text-align:center; padding:0 32px; }
 
-/* Confirm modal */
-#confirmModal { display:none; position:fixed; inset:0; z-index:200; background:rgba(0,0,0,0.6); align-items:flex-end; backdrop-filter:blur(4px); }
+/* ── CONFIRM MODAL ── */
+#confirmModal { display:none; position:fixed; inset:0; z-index:300; background:rgba(0,0,0,0.7); align-items:flex-end; backdrop-filter:blur(6px); }
 #confirmModal.open { display:flex; }
-.confirm-sheet { background:var(--card); border-radius:20px 20px 0 0; padding:20px 20px calc(var(--safe-bot) + 20px); width:100%; max-width:430px; margin:0 auto; }
-.confirm-handle { width:36px; height:4px; background:var(--gray2); border-radius:2px; margin:0 auto 18px; }
-.confirm-title { font-size:13px; font-weight:600; color:var(--sub); text-transform:uppercase; letter-spacing:0.05em; margin-bottom:8px; }
-.confirm-vin { font-family:'SF Mono',monospace; font-size:22px; font-weight:700; letter-spacing:0.08em; color:var(--text); margin-bottom:4px; word-break:break-all; }
-.confirm-status { font-size:13px; margin-bottom:16px; }
-.confirm-edit { width:100%; padding:12px; border:1.5px solid var(--gray1); border-radius:12px; font-size:16px; font-family:'SF Mono',monospace; letter-spacing:0.06em; text-transform:uppercase; background:var(--gray0); color:var(--text); outline:none; margin-bottom:14px; }
-.confirm-btns { display:flex; gap:10px; margin-bottom:10px; }
-.btn-use { flex:2; padding:15px; background:var(--ford-blue); color:#fff; border:none; border-radius:12px; font-size:16px; font-weight:700; cursor:pointer; }
-.btn-edit-vin { flex:1; padding:15px; background:var(--gray1); color:var(--text); border:none; border-radius:12px; font-size:15px; font-weight:600; cursor:pointer; }
-.btn-retry { width:100%; padding:13px; background:none; border:1.5px solid var(--gray1); border-radius:12px; font-size:15px; font-weight:500; color:var(--sub); cursor:pointer; }
+.confirm-sheet { background:var(--navy3); border:0.5px solid var(--border-strong); border-radius:24px 24px 0 0; padding:20px 20px calc(var(--safe-bot) + 20px); width:100%; max-width:430px; margin:0 auto; }
+.sheet-handle { width:36px; height:4px; background:var(--w15); border-radius:2px; margin:0 auto 18px; }
+.sheet-title { font-size:12px; font-weight:600; color:var(--w50); text-transform:uppercase; letter-spacing:0.06em; margin-bottom:8px; }
+.sheet-vin { font-family:'SF Mono',monospace; font-size:22px; font-weight:700; letter-spacing:0.08em; color:var(--white); margin-bottom:4px; word-break:break-all; }
+.sheet-status { font-size:13px; margin-bottom:16px; }
+.sheet-edit-field { width:100%; padding:12px 14px; background:var(--w05); border:0.5px solid var(--border-strong); border-radius:10px; font-size:16px; font-family:'SF Mono',monospace; letter-spacing:0.06em; text-transform:uppercase; color:var(--white); outline:none; margin-bottom:14px; display:none; }
+.sheet-edit-field:focus { border-color:var(--gold); }
+.sheet-btns { display:flex; gap:10px; margin-bottom:10px; }
+.btn-use { flex:2; padding:15px; background:var(--gold); color:var(--navy); border:none; border-radius:12px; font-size:16px; font-weight:800; cursor:pointer; }
+.btn-edit-vin { flex:1; padding:15px; background:var(--w08); border:0.5px solid var(--border); border-radius:12px; font-size:14px; font-weight:600; color:var(--w70); cursor:pointer; }
+.btn-retry-scan { width:100%; padding:13px; background:none; border:0.5px solid var(--border); border-radius:12px; font-size:14px; font-weight:500; color:var(--w50); cursor:pointer; }
 
-/* Loading */
-.spinner-ring { width:52px; height:52px; border-radius:50%; border:4px solid var(--gray1); border-top-color:var(--ford-blue); animation:spin 0.8s linear infinite; }
-.loading-label { font-size:16px; font-weight:500; }
-.loading-sub { font-size:13px; color:var(--sub); text-align:center; }
+/* ── LOADING PAGE ── */
+#loading-page { gap: 16px; }
+.load-ring { width:56px; height:56px; border-radius:50%; border:3px solid var(--w08); border-top-color:var(--gold); animation:spin 0.8s linear infinite; }
+.load-label { font-size:17px; font-weight:600; color:var(--white); }
+.load-sub { font-size:13px; color:var(--w50); text-align:center; padding:0 32px; }
+.load-steps { display:flex; gap:6px; margin-top:8px; }
+.load-dot { width:6px; height:6px; border-radius:50%; background:var(--w15); transition:background 0.3s; }
+.load-dot.active { background:var(--gold); }
 
-/* Result */
-.result-hero { position:relative; background:var(--ford-blue); }
-.result-img-placeholder { width:100%; height:200px; background:linear-gradient(135deg,#003087 0%,#1a4fa0 100%); display:flex; align-items:center; justify-content:center; }
-.result-img-placeholder svg { width:64px; height:64px; color:rgba(255,255,255,0.25); }
-.back-btn { position:absolute; top:calc(var(--safe-top) + 10px); left:12px; background:rgba(0,0,0,0.45); border:none; border-radius:50%; width:34px; height:34px; display:flex; align-items:center; justify-content:center; cursor:pointer; backdrop-filter:blur(8px); }
-.back-btn svg { width:18px; height:18px; color:#fff; }
-.listing-link-btn { position:absolute; top:calc(var(--safe-top) + 10px); right:12px; background:rgba(0,0,0,0.45); border:none; border-radius:20px; padding:7px 12px; display:flex; align-items:center; gap:5px; cursor:pointer; backdrop-filter:blur(8px); font-size:12px; font-weight:600; color:#fff; text-decoration:none; }
-.result-info { background:var(--card); padding:16px 16px 0; }
-.result-badge-row { display:flex; gap:6px; flex-wrap:wrap; margin-bottom:10px; }
-.badge { font-size:11px; font-weight:600; padding:4px 9px; border-radius:6px; }
-.badge-keller { background:var(--blue-light); color:var(--ford-blue); }
-.badge-good { background:var(--green-light); color:var(--green); }
-.badge-warn { background:#fff5e6; color:#a05800; }
-.result-ymmt { font-size:22px; font-weight:700; letter-spacing:-0.5px; line-height:1.15; margin-bottom:4px; }
-.result-vin { font-size:12px; color:var(--sub); font-family:'SF Mono',monospace; margin-bottom:14px; }
-.price-row { display:flex; align-items:baseline; gap:10px; padding:14px 0; border-top:1px solid var(--gray1); border-bottom:1px solid var(--gray1); margin-bottom:14px; }
-.price-main { font-size:28px; font-weight:800; color:var(--ford-blue); }
-.price-retail { font-size:14px; color:var(--sub); text-decoration:line-through; }
-.price-save { font-size:13px; font-weight:600; color:var(--green); background:var(--green-light); padding:3px 8px; border-radius:6px; }
-.stats-grid { display:grid; grid-template-columns:1fr 1fr; gap:1px; background:var(--gray1); border-radius:12px; overflow:hidden; margin-bottom:16px; }
-.stat-cell { background:var(--card); padding:12px 14px; }
-.stat-cell-label { font-size:11px; color:var(--sub); font-weight:500; margin-bottom:3px; }
-.stat-cell-val { font-size:15px; font-weight:600; }
-.section { background:var(--card); margin:8px 0 0; padding:16px; }
-.section-hdr { display:flex; align-items:center; justify-content:space-between; margin-bottom:12px; }
-.section-title { font-size:13px; font-weight:700; color:var(--sub); text-transform:uppercase; letter-spacing:0.05em; }
-.section-action { font-size:13px; font-weight:600; color:var(--ford-blue); background:none; border:none; cursor:pointer; }
-.pitch-bubble { background:var(--blue-light); border-radius:4px 14px 14px 14px; padding:14px 16px; font-size:16px; line-height:1.6; color:var(--text); margin-bottom:12px; min-height:60px; }
-.pitch-cursor { display:inline-block; width:2px; height:1em; background:var(--ford-blue); vertical-align:middle; margin-left:2px; animation:blink 0.9s step-end infinite; }
+/* ── RESULT PAGE ── */
+.result-hero {
+  position:relative; height:210px;
+  background:linear-gradient(160deg, var(--navy2) 0%, var(--navy4) 100%);
+  display:flex; align-items:center; justify-content:center; overflow:hidden;
+}
+.result-hero-car svg { width:90px; height:90px; stroke:var(--w08); fill:none; stroke-width:1; stroke-linecap:round; stroke-linejoin:round; }
+.result-hero-overlay { position:absolute; inset:0; background:linear-gradient(to bottom, transparent 40%, var(--navy3) 100%); }
+.result-hero-btns { position:absolute; top:calc(var(--safe-top)+10px); left:0; right:0; display:flex; align-items:center; justify-content:space-between; padding:0 14px; }
+.hero-btn { background:rgba(0,0,0,0.5); border:none; border-radius:50%; width:34px; height:34px; display:flex; align-items:center; justify-content:center; cursor:pointer; backdrop-filter:blur(8px); }
+.hero-btn svg { width:16px; height:16px; stroke:#fff; fill:none; stroke-width:2.2; stroke-linecap:round; stroke-linejoin:round; }
+.hero-listing-btn { background:rgba(0,0,0,0.5); border:none; border-radius:20px; padding:7px 12px; display:flex; align-items:center; gap:5px; cursor:pointer; backdrop-filter:blur(8px); font-size:12px; font-weight:600; color:#fff; text-decoration:none; }
+.hero-listing-btn svg { width:12px; height:12px; stroke:#fff; fill:none; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
+
+.result-body { background:var(--navy3); padding:16px 14px 0; }
+.r-badges { display:flex; gap:6px; flex-wrap:wrap; margin-bottom:10px; }
+.r-badge { font-size:10px; font-weight:700; padding:3px 9px; border-radius:5px; letter-spacing:0.02em; }
+.r-badge-gold { background:var(--gold-dim); color:var(--gold); }
+.r-badge-teal { background:var(--teal-dim); color:var(--teal); }
+.r-badge-blue { background:var(--blue-dim); color:var(--blue); }
+.r-ymmt { font-size:22px; font-weight:800; color:var(--white); letter-spacing:-0.5px; line-height:1.2; margin-bottom:4px; }
+.r-vin { font-size:11px; color:var(--w30); font-family:'SF Mono',monospace; letter-spacing:0.04em; margin-bottom:14px; }
+
+.r-price-row { display:flex; align-items:baseline; gap:10px; padding:12px 0; border-top:0.5px solid var(--border); border-bottom:0.5px solid var(--border); margin-bottom:14px; }
+.r-price { font-size:30px; font-weight:800; color:var(--gold); letter-spacing:-1px; }
+.r-retail { font-size:14px; color:var(--w30); text-decoration:line-through; }
+.r-save { font-size:11px; font-weight:700; color:var(--teal); background:var(--teal-dim); padding:3px 8px; border-radius:5px; }
+
+.r-stats { display:grid; grid-template-columns:1fr 1fr; gap:1px; background:var(--border); border-radius:12px; overflow:hidden; margin-bottom:4px; }
+.r-stat { background:var(--navy3); padding:11px 13px; }
+.r-stat-label { font-size:10px; color:var(--w30); font-weight:500; margin-bottom:3px; text-transform:uppercase; letter-spacing:0.04em; }
+.r-stat-val { font-size:14px; font-weight:600; color:var(--w90); }
+
+/* Sections */
+.r-section { background:var(--navy3); padding:14px; margin-top:2px; }
+.r-sec-hdr { display:flex; align-items:center; justify-content:space-between; margin-bottom:11px; }
+.r-sec-title { font-size:11px; font-weight:700; color:var(--w30); text-transform:uppercase; letter-spacing:0.07em; }
+.r-sec-btn { font-size:12px; color:var(--blue); background:none; border:none; cursor:pointer; font-weight:500; }
+
+/* Pitch */
+.pitch-bubble { background:var(--w05); border-left:2.5px solid var(--gold); border-radius:0 10px 10px 10px; padding:12px 14px; font-size:15px; line-height:1.65; color:var(--w90); margin-bottom:12px; min-height:56px; }
+.pitch-cursor { display:inline-block; width:2px; height:1em; background:var(--gold); vertical-align:middle; margin-left:2px; animation:blink 0.9s step-end infinite; }
 @keyframes blink { 50%{opacity:0} }
-.btn-row { display:flex; gap:8px; }
-.btn-secondary { flex:1; padding:11px; border:1.5px solid var(--gray1); border-radius:10px; font-size:14px; font-weight:600; background:none; color:var(--text); cursor:pointer; display:flex; align-items:center; justify-content:center; gap:6px; }
-.btn-primary-sm { flex:1; padding:11px; background:var(--ford-blue); border:none; border-radius:10px; font-size:14px; font-weight:600; color:#fff; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:6px; }
-.btn-secondary svg, .btn-primary-sm svg { width:15px; height:15px; }
-.features-list { display:flex; flex-direction:column; gap:8px; }
-.feature-row { display:flex; align-items:flex-start; gap:10px; }
-.feat-dot { width:6px; height:6px; border-radius:50%; background:var(--ford-blue); flex-shrink:0; margin-top:7px; }
-.listing-cta { margin:8px 16px 0; background:var(--ford-blue); border-radius:14px; padding:16px; display:flex; align-items:center; gap:14px; cursor:pointer; text-decoration:none; }
-.cta-icon { width:42px; height:42px; background:rgba(255,255,255,0.2); border-radius:10px; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
-.cta-icon svg { width:22px; height:22px; color:#fff; }
-.cta-text strong { font-size:15px; font-weight:700; color:#fff; display:block; }
-.cta-text span { font-size:13px; color:rgba(255,255,255,0.7); }
-.cta-arrow { margin-left:auto; }
-.cta-arrow svg { width:18px; height:18px; color:rgba(255,255,255,0.6); }
+.pitch-btns { display:flex; gap:8px; }
+.pitch-btn { flex:1; padding:11px; border-radius:10px; font-size:13px; font-weight:700; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:6px; }
+.pitch-btn svg { width:14px; height:14px; stroke:currentColor; fill:none; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
+.pitch-btn-outline { background:var(--w05); border:0.5px solid var(--border); color:var(--w70); }
+.pitch-btn-solid { background:var(--gold); border:none; color:var(--navy); }
 
-/* Notice box */
-.notice-box { background:#fff8e6; border:1px solid #f0d080; border-radius:12px; padding:12px 14px; margin:12px 16px 0; font-size:13px; color:#7a5500; line-height:1.5; }
-.notice-box a { color:var(--ford-blue); font-weight:600; }
+/* Speech btn */
+.speech-btn { width:100%; padding:12px; background:var(--w05); border:0.5px solid var(--border); border-radius:10px; font-size:13px; font-weight:600; color:var(--w70); cursor:pointer; display:flex; align-items:center; justify-content:center; gap:8px; margin-top:8px; }
+.speech-btn svg { width:15px; height:15px; stroke:currentColor; fill:none; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
+.speech-btn.speaking { background:var(--teal-dim); border-color:var(--teal); color:var(--teal); }
 
-/* History */
-.hist-hdr { padding:16px; border-bottom:1px solid var(--gray1); display:flex; align-items:center; justify-content:space-between; }
-.hist-hdr h2 { font-size:18px; font-weight:700; }
-.hist-clear-btn { font-size:14px; color:var(--red); background:none; border:none; font-weight:600; cursor:pointer; }
-.hist-list { padding:12px 16px; }
-.hist-item { display:flex; align-items:center; gap:12px; padding:12px 0; border-bottom:1px solid var(--gray1); cursor:pointer; }
+/* Features list */
+.feat-list { display:flex; flex-direction:column; gap:7px; }
+.feat-row { display:flex; align-items:flex-start; gap:10px; }
+.feat-bullet { width:5px; height:5px; border-radius:50%; background:var(--gold); flex-shrink:0; margin-top:6px; }
+.feat-text { font-size:14px; color:var(--w90); line-height:1.5; }
+
+/* Payment estimator */
+.estimator { background:var(--w05); border:0.5px solid var(--border); border-radius:12px; padding:14px; }
+.est-row { display:flex; align-items:center; gap:10px; margin-bottom:10px; }
+.est-label { font-size:12px; color:var(--w50); width:70px; flex-shrink:0; }
+.est-slider { flex:1; -webkit-appearance:none; appearance:none; height:3px; border-radius:2px; background:var(--border-strong); outline:none; }
+.est-slider::-webkit-slider-thumb { -webkit-appearance:none; width:18px; height:18px; border-radius:50%; background:var(--gold); cursor:pointer; }
+.est-val { font-size:13px; font-weight:700; color:var(--white); width:50px; text-align:right; flex-shrink:0; }
+.est-result { display:flex; align-items:center; justify-content:space-between; padding:12px 14px; background:var(--navy4); border-radius:10px; }
+.est-result-label { font-size:12px; color:var(--w50); }
+.est-result-num { font-size:22px; font-weight:800; color:var(--gold); }
+.est-result-sub { font-size:10px; color:var(--w30); margin-top:1px; text-align:right; }
+
+/* Market comp */
+.comp-item { display:flex; align-items:center; gap:10px; padding:10px 0; border-bottom:0.5px solid var(--border); }
+.comp-item:last-child { border-bottom:none; padding-bottom:0; }
+.comp-info { flex:1; }
+.comp-name { font-size:13px; font-weight:600; color:var(--w90); }
+.comp-detail { font-size:11px; color:var(--w50); margin-top:2px; }
+.comp-right { text-align:right; flex-shrink:0; }
+.comp-price { font-size:14px; font-weight:700; color:var(--white); }
+.comp-delta { font-size:10px; font-weight:600; padding:2px 6px; border-radius:4px; margin-top:3px; display:inline-block; }
+.comp-delta-low { background:var(--teal-dim); color:var(--teal); }
+.comp-delta-high { background:var(--red-dim); color:var(--red); }
+.comp-delta-same { background:var(--w05); color:var(--w50); }
+
+/* Deal notes */
+.notes-area { width:100%; background:var(--w05); border:0.5px solid var(--border); border-radius:10px; padding:12px 14px; font-size:14px; color:var(--w90); font-family:-apple-system,sans-serif; resize:none; outline:none; min-height:80px; line-height:1.6; }
+.notes-area:focus { border-color:var(--gold); }
+.notes-area::placeholder { color:var(--w30); }
+.notes-save-btn { width:100%; margin-top:8px; padding:12px; background:var(--gold); border:none; border-radius:10px; font-size:14px; font-weight:700; color:var(--navy); cursor:pointer; }
+
+/* Listing CTA */
+.listing-cta { display:flex; align-items:center; gap:13px; padding:14px; background:var(--navy4); border:0.5px solid var(--border); border-radius:12px; margin:2px 0 0; cursor:pointer; text-decoration:none; }
+.listing-cta:active { opacity:0.8; }
+.listing-cta-icon { width:40px; height:40px; background:var(--blue-dim); border-radius:10px; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+.listing-cta-icon svg { width:20px; height:20px; stroke:var(--blue); fill:none; stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round; }
+.listing-cta-text strong { font-size:14px; font-weight:700; color:var(--white); display:block; }
+.listing-cta-text span { font-size:11px; color:var(--w50); }
+.listing-cta-arrow { margin-left:auto; }
+.listing-cta-arrow svg { width:16px; height:16px; stroke:var(--w30); fill:none; stroke-width:2.5; stroke-linecap:round; stroke-linejoin:round; }
+
+/* ── MARKET PAGE ── */
+#market-page { display:none; }
+#market-page.active { display:block; }
+.market-hero { padding:20px 14px; background:linear-gradient(160deg,var(--navy2) 0%,#0d1f3c 100%); }
+.market-hero h2 { font-size:20px; font-weight:800; color:var(--white); letter-spacing:-0.3px; margin-bottom:4px; }
+.market-hero p { font-size:13px; color:var(--w50); }
+.market-search { margin:14px 0 0; background:var(--w08); border:0.5px solid var(--border-strong); border-radius:12px; padding:11px 14px; font-size:14px; color:var(--white); display:flex; align-items:center; gap:10px; cursor:pointer; }
+.market-search svg { width:15px; height:15px; stroke:var(--w50); fill:none; stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round; }
+.market-search span { color:var(--w30); font-size:13px; }
+.market-section { padding:14px; margin-top:2px; background:var(--navy3); }
+.market-empty { padding:40px 20px; text-align:center; }
+.market-empty svg { width:44px; height:44px; stroke:var(--w15); fill:none; stroke-width:1.5; stroke-linecap:round; stroke-linejoin:round; display:block; margin:0 auto 12px; }
+.market-empty p { font-size:14px; color:var(--w30); line-height:1.6; }
+
+/* ── HISTORY PAGE ── */
+#history-page { display:none; }
+#history-page.active { display:block; }
+.hist-hero { padding:20px 14px 14px; background:linear-gradient(160deg,var(--navy2) 0%,#0d1f3c 100%); display:flex; align-items:center; justify-content:space-between; }
+.hist-hero h2 { font-size:20px; font-weight:800; color:var(--white); letter-spacing:-0.3px; }
+.hist-clear { font-size:13px; color:var(--red); background:none; border:none; font-weight:600; cursor:pointer; }
+.hist-list { padding:10px 14px; }
+.hist-item { display:flex; align-items:center; gap:11px; padding:11px 0; border-bottom:0.5px solid var(--border); cursor:pointer; }
 .hist-item:last-child { border-bottom:none; }
-.hist-info { flex:1; }
-.hist-info strong { font-size:15px; font-weight:600; }
-.hist-info span { font-size:12px; color:var(--sub); display:block; margin-top:2px; }
-.hist-price { font-size:15px; font-weight:700; color:var(--ford-blue); }
-.hist-empty { padding:60px 32px; text-align:center; color:var(--sub); }
-.hist-empty svg { width:48px; height:48px; margin:0 auto 12px; opacity:0.3; display:block; }
+.hist-item:active { opacity:0.7; }
+.hist-car-icon { width:44px; height:32px; background:var(--w05); border-radius:8px; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+.hist-car-icon svg { width:20px; height:20px; stroke:var(--w30); fill:none; stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round; }
+.hist-info { flex:1; min-width:0; }
+.hist-name { font-size:14px; font-weight:600; color:var(--w90); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.hist-sub { font-size:11px; color:var(--w50); margin-top:2px; }
+.hist-vin-text { font-size:10px; color:var(--w30); font-family:'SF Mono',monospace; margin-top:1px; }
+.hist-price { font-size:14px; font-weight:700; color:var(--gold); flex-shrink:0; }
+.hist-empty { padding:60px 20px; text-align:center; }
+.hist-empty svg { width:44px; height:44px; stroke:var(--w15); fill:none; stroke-width:1.5; stroke-linecap:round; stroke-linejoin:round; display:block; margin:0 auto 12px; }
+.hist-empty p { font-size:14px; color:var(--w30); }
 
-/* Tabbar */
-.tabbar { display:flex; background:var(--card); border-top:1px solid var(--gray1); padding:8px 0 calc(var(--safe-bot) + 4px); flex-shrink:0; }
-.tab { flex:1; display:flex; flex-direction:column; align-items:center; gap:3px; cursor:pointer; padding:4px 0; background:none; border:none; }
-.tab svg { width:22px; height:22px; color:var(--gray3); }
-.tab span { font-size:10px; color:var(--gray3); font-weight:500; }
-.tab.active svg, .tab.active span { color:var(--ford-blue); }
+/* ── ERROR ── */
+.err-card { background:var(--red-dim); border:0.5px solid rgba(224,90,90,0.3); border-radius:14px; padding:20px; margin:20px 14px; text-align:center; }
+.err-card svg { width:36px; height:36px; stroke:var(--red); fill:none; stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round; display:block; margin:0 auto 10px; }
+.err-card strong { font-size:16px; font-weight:700; display:block; margin-bottom:6px; }
+.err-card p { font-size:13px; color:var(--w50); margin-bottom:14px; line-height:1.6; }
+.btn-try-again { background:var(--gold); color:var(--navy); border:none; border-radius:10px; padding:12px 24px; font-size:15px; font-weight:700; cursor:pointer; }
 
-.toast { position:fixed; bottom:calc(var(--safe-bot) + 80px); left:50%; transform:translateX(-50%) translateY(20px); background:#1c1c1e; color:#fff; font-size:14px; font-weight:500; padding:10px 18px; border-radius:20px; opacity:0; transition:opacity 0.2s,transform 0.2s; pointer-events:none; white-space:nowrap; z-index:999; }
+/* Toast */
+.toast { position:fixed; bottom:calc(var(--safe-bot) + 72px); left:50%; transform:translateX(-50%) translateY(16px); background:var(--navy4); border:0.5px solid var(--border-strong); color:var(--white); font-size:13px; font-weight:500; padding:10px 18px; border-radius:20px; opacity:0; transition:opacity 0.2s,transform 0.2s; pointer-events:none; white-space:nowrap; z-index:999; }
 .toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
-
-.error-card { background:#fff0f0; border:1px solid #ffc5c5; border-radius:14px; padding:20px; margin:20px 16px; text-align:center; }
-.error-card svg { width:36px; height:36px; color:var(--red); margin:0 auto 10px; display:block; }
-.error-card strong { font-size:16px; font-weight:700; display:block; margin-bottom:6px; }
-.error-card p { font-size:14px; color:var(--sub); margin-bottom:14px; line-height:1.5; }
-.btn-try-again { background:var(--ford-blue); color:#fff; border:none; border-radius:10px; padding:12px 24px; font-size:15px; font-weight:600; cursor:pointer; }
 </style>
 </head>
 <body>
 <div id="app">
+
+  <!-- HEADER -->
   <div class="hdr">
-    <div class="hdr-logo">
-      <svg viewBox="0 0 24 24" fill="none" stroke="#003087" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 17H3a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11a2 2 0 0 1 2 2v3"/><rect x="9" y="11" width="14" height="10" rx="2"/><circle cx="12" cy="21" r="1"/><circle cx="20" cy="21" r="1"/></svg>
-    </div>
+    <div class="hdr-logo">K</div>
     <div class="hdr-title">
       <h1>Keller Scout</h1>
-      <p>Keller Ford &amp; Used Cars · Hanford</p>
+      <p>Keller Ford &amp; Used Cars · Hanford, CA</p>
     </div>
-    <button class="hdr-btn" onclick="showTab('history')">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="14" height="14"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+    <div class="hdr-pill" onclick="showTab('history')">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
       History
-    </button>
+    </div>
   </div>
 
   <!-- SCAN PAGE -->
   <div id="scan-page" class="page active">
-    <div class="scan-hero">
-      <h2>Scan Any VIN</h2>
-      <p>Point camera at the VIN text — door jamb, dash, or sticker</p>
+    <div class="scan-gradient">
+      <div class="scan-title">Scan a VIN</div>
+      <div class="scan-sub">Door jamb · Dashboard · Window sticker · Paper</div>
     </div>
-    <div style="margin-top:-18px;position:relative;z-index:2;">
-      <div class="vin-entry">
+    <div style="margin-top:-16px;position:relative;z-index:2;padding:0 14px;">
+      <div class="vin-card">
         <button class="btn-camera" onclick="openCamera()">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
           Scan VIN with Camera
         </button>
-        <div class="divider"><span>or type it manually</span></div>
-        <div class="vin-field-wrap">
-          <input class="vin-field" id="vinInput" maxlength="17" placeholder="Enter VIN (17 characters)" autocomplete="off" autocorrect="off" autocapitalize="characters" spellcheck="false" oninput="onVinInput()" onkeydown="if(event.key==='Enter')doLookup()">
-          <button class="vin-clear" id="vinClear" onclick="clearVin()">
-            <svg viewBox="0 0 24 24" fill="currentColor" width="10" height="10"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        <div class="divider"><span>or type manually</span></div>
+        <input class="vin-field" id="vinInput" maxlength="17" placeholder="Enter VIN (17 characters)" autocomplete="off" autocorrect="off" autocapitalize="characters" spellcheck="false" oninput="onVinInput()" onkeydown="if(event.key==='Enter')doLookup()">
+        <div class="vin-row">
+          <span class="vin-count" id="vinCount">0 / 17</span>
+          <button class="btn-lookup" id="lookupBtn" onclick="doLookup()" disabled>
+            <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            Look Up
           </button>
         </div>
-        <div class="vin-char-count" id="vinCount">0 / 17</div>
-        <button class="btn-lookup" id="lookupBtn" onclick="doLookup()" disabled>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-          Look Up Vehicle
-        </button>
       </div>
     </div>
-    <div class="scan-tips">
-      <div class="tips-label">Tips for scanning text</div>
-      <div class="tip-card">
-        <div class="tip-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg></div>
-        <div class="tip-text"><strong>Get close — 4 to 6 inches away</strong><span>The VIN text should fill the scan window</span></div>
+
+    <div class="recent-wrap" id="recentWrap" style="display:none;">
+      <div class="sec-hdr">
+        <span class="sec-label">Recently viewed</span>
+        <button class="sec-link" onclick="showTab('history')">See all</button>
       </div>
-      <div class="tip-card">
-        <div class="tip-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 6s4-2 11-2 11 2 11 2"/><path d="M1 18s4 2 11 2 11-2 11-2"/><line x1="1" y1="12" x2="23" y2="12"/></svg></div>
-        <div class="tip-text"><strong>Keep it level and still</strong><span>Tap the button — don't move while it reads</span></div>
-      </div>
-      <div class="tip-card">
-        <div class="tip-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg></div>
-        <div class="tip-text"><strong>Use the torch in dark spots</strong><span>Door jambs and dashboards need extra light</span></div>
-      </div>
-    </div>
-    <div class="recently-viewed" id="recentlyViewed" style="display:none;">
-      <div class="rv-label">Recently Viewed</div>
       <div id="recentList"></div>
+    </div>
+
+    <div class="tips-wrap">
+      <div class="sec-hdr"><span class="sec-label">Scanning tips</span></div>
+      <div class="tip-row">
+        <div class="tip-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg></div>
+        <div class="tip-text"><strong>4–6 inches away</strong><span>Fill the scan window with just the VIN text line</span></div>
+      </div>
+      <div class="tip-row">
+        <div class="tip-icon"><svg viewBox="0 0 24 24"><path d="M1 6s4-2 11-2 11 2 11 2"/><path d="M1 18s4 2 11 2 11-2 11-2"/><line x1="1" y1="12" x2="23" y2="12"/></svg></div>
+        <div class="tip-text"><strong>Hold steady and level</strong><span>Tap the shutter — don't move while it reads</span></div>
+      </div>
+      <div class="tip-row">
+        <div class="tip-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/></svg></div>
+        <div class="tip-text"><strong>Use torch for dark spots</strong><span>Door jambs especially need extra light</span></div>
+      </div>
     </div>
   </div>
 
   <!-- LOADING PAGE -->
   <div id="loading-page" class="page">
-    <div class="spinner-ring"></div>
-    <div class="loading-label" id="loadingLabel">Decoding VIN…</div>
-    <div class="loading-sub" id="loadingSub">Searching Keller inventory</div>
+    <div class="load-ring"></div>
+    <div class="load-label" id="loadLabel">Decoding VIN…</div>
+    <div class="load-sub" id="loadSub">Identifying year, make, model &amp; trim</div>
+    <div class="load-steps">
+      <div class="load-dot active" id="dot0"></div>
+      <div class="load-dot" id="dot1"></div>
+      <div class="load-dot" id="dot2"></div>
+      <div class="load-dot" id="dot3"></div>
+    </div>
   </div>
 
   <!-- RESULT PAGE -->
@@ -294,22 +495,49 @@ html, body { height: 100%; background: var(--gray0); font-family: -apple-system,
     <div id="resultContent"></div>
   </div>
 
+  <!-- MARKET PAGE -->
+  <div id="market-page" class="page">
+    <div class="market-hero">
+      <h2>Market Pricing</h2>
+      <p>Scan a VIN on the Scan tab to see market comps</p>
+      <div class="market-search" onclick="showTab('scan')">
+        <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <span>Scan a VIN to load market data…</span>
+      </div>
+    </div>
+    <div class="market-section" id="marketContent">
+      <div class="market-empty">
+        <svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        <p>After you scan a vehicle, market comps and pricing will appear here.</p>
+      </div>
+    </div>
+  </div>
+
   <!-- HISTORY PAGE -->
   <div id="history-page" class="page">
-    <div class="hist-hdr">
-      <h2>Lookup History</h2>
-      <button class="hist-clear-btn" onclick="clearHistory()">Clear All</button>
+    <div class="hist-hero">
+      <h2>History</h2>
+      <button class="hist-clear" onclick="clearHistory()">Clear All</button>
     </div>
     <div class="hist-list" id="histList"></div>
   </div>
 
+  <!-- TAB BAR -->
   <div class="tabbar">
     <button class="tab active" id="tab-scan" onclick="showTab('scan')">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 7 4 4 20 4 20 7"/><line x1="9" y1="20" x2="15" y2="20"/><line x1="12" y1="4" x2="12" y2="20"/></svg>
+      <svg viewBox="0 0 24 24"><polyline points="4 7 4 4 20 4 20 7"/><line x1="9" y1="20" x2="15" y2="20"/><line x1="12" y1="4" x2="12" y2="20"/></svg>
       <span>Scan</span>
     </button>
+    <button class="tab" id="tab-result" onclick="showTab('result')" style="display:none;">
+      <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+      <span>Vehicle</span>
+    </button>
+    <button class="tab" id="tab-market" onclick="showTab('market')">
+      <svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+      <span>Market</span>
+    </button>
     <button class="tab" id="tab-history" onclick="showTab('history')">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
       <span>History</span>
     </button>
   </div>
@@ -320,84 +548,85 @@ html, body { height: 100%; background: var(--gray0); font-family: -apple-system,
   <video id="camVideo" playsinline autoplay muted></video>
   <canvas id="camCanvas" style="display:none;"></canvas>
   <div class="cam-ui">
-    <div class="cam-mask-top"></div>
-    <div class="cam-mask-mid">
-      <div class="cam-mask-side"></div>
-      <div class="cam-window"><div class="cam-scan-line"></div></div>
-      <div class="cam-mask-side"></div>
+    <div class="cam-top-mask">
+      <div class="cam-top-row">
+        <button class="cam-icon-btn" onclick="closeCamera()">
+          <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+        <div class="cam-label">Align VIN text in box</div>
+        <button class="cam-icon-btn" id="torchBtn" onclick="toggleTorch()">
+          <svg viewBox="0 0 24 24"><path d="M9 2h6l-1 7h-4L9 2z"/><path d="M10 9l-4 13h12L14 9"/></svg>
+        </button>
+      </div>
     </div>
-    <div class="cam-mask-bot">
-      <div class="cam-hint">Align the VIN text row inside the box</div>
-      <div class="cam-hint-sub">Works on door jamb, dashboard, window sticker, or any paper with the VIN printed on it</div>
-      <button class="cam-capture-btn" onclick="captureFrame()">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+    <div class="cam-mid">
+      <div class="cam-side-mask"></div>
+      <div class="cam-window cam-corners">
+        <div class="cam-scan-line"></div>
+      </div>
+      <div class="cam-side-mask"></div>
+    </div>
+    <div class="cam-bot-mask">
+      <div class="cam-hint">Works on door jamb · dash · sticker · paper · title</div>
+      <button class="cam-shutter" onclick="captureFrame()">
+        <svg viewBox="0 0 24 24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
       </button>
     </div>
   </div>
-  <button class="cam-close-btn" onclick="closeCamera()">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" width="20" height="20"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-  </button>
-  <button class="cam-torch-btn" id="torchBtn" onclick="toggleTorch()">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20"><path d="M9 2h6l-1 7h-4L9 2z"/><path d="M10 9l-4 13h12L14 9"/></svg>
-  </button>
-  <div class="cam-processing" id="camProcessing">
-    <div class="cam-proc-ring"></div>
-    <div class="cam-proc-label" id="camProcLabel">Reading VIN text…</div>
-    <div class="cam-proc-sub" id="camProcSub">Tesseract OCR is analyzing the image</div>
+  <div class="cam-processing" id="camProc">
+    <div class="proc-ring"></div>
+    <div class="proc-label" id="procLabel">Reading VIN…</div>
+    <div class="proc-sub">Hold still — analyzing text</div>
   </div>
 </div>
 
 <!-- CONFIRM MODAL -->
 <div id="confirmModal">
   <div class="confirm-sheet">
-    <div class="confirm-handle"></div>
-    <div class="confirm-title">VIN scanned</div>
-    <div class="confirm-vin" id="confirmVinDisplay"></div>
-    <div class="confirm-status" id="confirmStatus"></div>
-    <input class="confirm-edit" id="confirmEditField" maxlength="17" autocapitalize="characters" spellcheck="false" style="display:none;">
-    <div class="confirm-btns">
+    <div class="sheet-handle"></div>
+    <div class="sheet-title">VIN scanned</div>
+    <div class="sheet-vin" id="sheetVin"></div>
+    <div class="sheet-status" id="sheetStatus"></div>
+    <input class="sheet-edit-field" id="sheetEdit" maxlength="17" autocapitalize="characters" spellcheck="false">
+    <div class="sheet-btns">
       <button class="btn-use" onclick="useScannedVin()">Use This VIN</button>
-      <button class="btn-edit-vin" onclick="toggleEdit()">Edit</button>
+      <button class="btn-edit-vin" onclick="toggleSheetEdit()">Edit</button>
     </div>
-    <button class="btn-retry" onclick="retryCamera()">Scan Again</button>
+    <button class="btn-retry-scan" onclick="retryCamera()">Scan Again</button>
   </div>
 </div>
 
 <div class="toast" id="toast"></div>
 
-<!-- Tesseract.js — runs fully on-device, no CORS issues -->
 <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
-
 <script>
-let currentVehicle = null;
-const HISTORY_KEY = 'keller_scout_v3';
-let camStream = null;
-let torchOn = false;
+// ── State ──
+let cv = null; // current vehicle
+let ocrWorker = null, ocrReady = false;
+let camStream = null, torchOn = false;
 let scannedVin = '';
-let ocrWorker = null;
-let ocrReady = false;
 let editMode = false;
+let isSpeaking = false;
+const HK = 'keller_scout_v4';
 
-// ── Pre-load OCR worker so first scan is fast ──
+// ── OCR pre-load ──
 async function initOCR() {
   if (ocrWorker) return;
   try {
     ocrWorker = await Tesseract.createWorker('eng', 1, { logger: () => {} });
     await ocrWorker.setParameters({
-      // Only allow valid VIN characters — dramatically improves accuracy
       tessedit_char_whitelist: 'ABCDEFGHJKLMNPRSTUVWXYZ0123456789',
-      tessedit_pageseg_mode: '6',   // assume uniform block of text
+      tessedit_pageseg_mode: '6',
     });
     ocrReady = true;
-  } catch(e) {
-    console.warn('OCR init failed:', e);
-  }
+  } catch(e) { console.warn('OCR init:', e); }
 }
-initOCR(); // warm up immediately on page load
+initOCR();
 
 // ── Tabs ──
+const TABS = ['scan','loading','result','market','history'];
 function showTab(tab) {
-  ['scan','loading','result','history'].forEach(p => {
+  TABS.forEach(p => {
     document.getElementById(p+'-page').classList.remove('active');
     const t = document.getElementById('tab-'+p);
     if (t) t.classList.remove('active');
@@ -415,236 +644,146 @@ function onVinInput() {
   const val = inp.value.toUpperCase().replace(/[^A-HJ-NPR-Z0-9]/g,'');
   inp.value = val;
   document.getElementById('vinCount').textContent = val.length + ' / 17';
-  document.getElementById('vinClear').style.display = val.length > 0 ? 'flex' : 'none';
   document.getElementById('lookupBtn').disabled = val.length < 11;
-}
-function clearVin() {
-  document.getElementById('vinInput').value = '';
-  onVinInput();
-  document.getElementById('vinInput').focus();
 }
 
 // ── Camera ──
 async function openCamera() {
   try {
     camStream = await navigator.mediaDevices.getUserMedia({
-      video: {
-        facingMode: { ideal: 'environment' },
-        width: { ideal: 1920 }, height: { ideal: 1080 },
-        focusMode: 'continuous', focusDistance: 0.1
-      }
+      video: { facingMode:{ideal:'environment'}, width:{ideal:1920}, height:{ideal:1080} }
     });
-    const video = document.getElementById('camVideo');
-    video.srcObject = camStream;
-    await video.play();
+    document.getElementById('camVideo').srcObject = camStream;
+    await document.getElementById('camVideo').play();
     document.getElementById('cameraOverlay').classList.add('open');
-  } catch(err) {
-    if (err.name === 'NotAllowedError') {
-      showToast('Camera permission denied — check iPhone Settings → Safari → Camera');
-    } else {
-      showToast('Cannot open camera: ' + err.message);
-    }
+  } catch(e) {
+    showToast(e.name === 'NotAllowedError' ? 'Camera denied — check Settings > Safari > Camera' : 'Camera unavailable');
   }
 }
-
 function closeCamera() {
-  if (camStream) { camStream.getTracks().forEach(t => t.stop()); camStream = null; }
-  torchOn = false;
-  document.getElementById('torchBtn').classList.remove('on');
+  if (camStream) { camStream.getTracks().forEach(t=>t.stop()); camStream=null; }
+  torchOn=false;
+  document.getElementById('torchBtn').classList.remove('torch-on');
   document.getElementById('cameraOverlay').classList.remove('open');
-  document.getElementById('camProcessing').classList.remove('show');
+  document.getElementById('camProc').classList.remove('show');
 }
-
 async function toggleTorch() {
   if (!camStream) return;
   const track = camStream.getVideoTracks()[0];
   try {
-    torchOn = !torchOn;
-    await track.applyConstraints({ advanced: [{ torch: torchOn }] });
-    document.getElementById('torchBtn').classList.toggle('on', torchOn);
-  } catch(e) {
-    torchOn = false;
-    showToast('Torch not available');
-  }
+    torchOn=!torchOn;
+    await track.applyConstraints({advanced:[{torch:torchOn}]});
+    document.getElementById('torchBtn').classList.toggle('torch-on', torchOn);
+  } catch(e) { torchOn=false; showToast('Torch unavailable'); }
 }
 
-// ── Capture frame and run OCR ──
+// ── Capture & OCR ──
 async function captureFrame() {
   const video = document.getElementById('camVideo');
   const canvas = document.getElementById('camCanvas');
-  const proc = document.getElementById('camProcessing');
-
-  // Grab the full frame
-  canvas.width = video.videoWidth || 1280;
-  canvas.height = video.videoHeight || 720;
+  canvas.width = video.videoWidth||1280;
+  canvas.height = video.videoHeight||720;
   const ctx = canvas.getContext('2d');
   ctx.drawImage(video, 0, 0);
 
-  // Crop to the horizontal strip shown in the scan window
-  // Scan window is roughly: top 35%→65% of screen height, sides 5%→95%
-  const cropX = Math.floor(canvas.width * 0.04);
-  const cropY = Math.floor(canvas.height * 0.28);
-  const cropW = Math.floor(canvas.width * 0.92);
-  const cropH = Math.floor(canvas.height * 0.44);
-
+  // Crop the scan window strip
+  const cx = Math.floor(canvas.width*0.04), cy = Math.floor(canvas.height*0.28);
+  const cw = Math.floor(canvas.width*0.92), ch = Math.floor(canvas.height*0.44);
   const crop = document.createElement('canvas');
-  crop.width = cropW * 2;   // upscale 2x for better OCR
-  crop.height = cropH * 2;
+  crop.width = cw*2; crop.height = ch*2;
   const cctx = crop.getContext('2d');
-  cctx.imageSmoothingEnabled = true;
   cctx.imageSmoothingQuality = 'high';
-  cctx.drawImage(canvas, cropX, cropY, cropW, cropH, 0, 0, crop.width, crop.height);
+  cctx.drawImage(canvas, cx, cy, cw, ch, 0, 0, crop.width, crop.height);
 
-  // Sharpen contrast for OCR
-  const id = cctx.getImageData(0, 0, crop.width, crop.height);
-  boostContrast(id);
-  cctx.putImageData(id, 0, 0);
+  const id = cctx.getImageData(0,0,crop.width,crop.height);
+  const d = id.data;
+  for (let i=0; i<d.length; i+=4) {
+    const g = 0.299*d[i]+0.587*d[i+1]+0.114*d[i+2];
+    const v = g<140 ? Math.max(0,g-50) : Math.min(255,g+50);
+    d[i]=d[i+1]=d[i+2]=v;
+  }
+  cctx.putImageData(id,0,0);
 
-  // Show processing UI
-  proc.classList.add('show');
-  document.getElementById('camProcLabel').textContent = 'Reading VIN text…';
-  document.getElementById('camProcSub').textContent = 'Hold still — analyzing image';
+  document.getElementById('camProc').classList.add('show');
+  document.getElementById('procLabel').textContent = 'Reading VIN text…';
 
   try {
-    if (!ocrReady) {
-      document.getElementById('camProcSub').textContent = 'Loading OCR engine…';
-      await initOCR();
-    }
-
+    if (!ocrReady) { document.getElementById('procLabel').textContent = 'Loading OCR…'; await initOCR(); }
     const { data } = await ocrWorker.recognize(crop);
-    const rawText = data.text || '';
-
-    proc.classList.remove('show');
-
-    const vin = extractVin(rawText);
-    if (vin) {
-      showConfirmModal(vin);
-    } else {
-      // Show best guess so user can correct it
-      const cleaned = rawText.toUpperCase().replace(/[^A-HJ-NPR-Z0-9]/g,'').slice(0,17);
-      if (cleaned.length >= 5) {
-        showConfirmModal(cleaned); // let them edit it
-      } else {
-        showToast('Could not read text — try closer or better light');
-      }
-    }
+    document.getElementById('camProc').classList.remove('show');
+    const vin = extractVin(data.text||'');
+    if (vin && vin.length >= 5) { showConfirmModal(vin); }
+    else { showToast('No VIN found — try closer or better light'); }
   } catch(e) {
-    proc.classList.remove('show');
-    showToast('OCR error — try again');
-    console.error(e);
+    document.getElementById('camProc').classList.remove('show');
+    showToast('OCR failed — try again or type manually');
   }
 }
 
-// Extract the best VIN candidate from raw OCR text
-function extractVin(rawText) {
-  // Clean to valid VIN chars only, split into runs
-  const clean = rawText.toUpperCase().replace(/[^A-HJ-NPR-Z0-9\s]/g, ' ');
-  const tokens = clean.split(/\s+/).filter(t => t.length >= 11);
-
-  // Try to find exactly 17 chars
-  for (const t of tokens) {
-    if (t.length === 17) return t;
-  }
-  // Try longest token >= 11 chars
-  tokens.sort((a,b) => b.length - a.length);
-  if (tokens.length > 0) return tokens[0].slice(0,17);
-
-  // Last resort: strip all spaces and take first 17
-  const stripped = clean.replace(/\s/g,'');
-  if (stripped.length >= 11) return stripped.slice(0,17);
-
-  return null;
-}
-
-function boostContrast(imageData) {
-  const d = imageData.data;
-  for (let i = 0; i < d.length; i += 4) {
-    const gray = 0.299*d[i] + 0.587*d[i+1] + 0.114*d[i+2];
-    // Convert to grayscale + high contrast threshold
-    const v = gray < 140 ? Math.max(0, gray - 50) : Math.min(255, gray + 50);
-    d[i] = d[i+1] = d[i+2] = v;
-    // alpha unchanged
-  }
+function extractVin(raw) {
+  const clean = raw.toUpperCase().replace(/[^A-HJ-NPR-Z0-9\s]/g,' ');
+  const tokens = clean.split(/\s+/).filter(t=>t.length>=5).sort((a,b)=>b.length-a.length);
+  if (!tokens.length) return null;
+  const t17 = tokens.find(t=>t.length===17);
+  return (t17 || tokens[0]).slice(0,17);
 }
 
 // ── Confirm modal ──
 function showConfirmModal(vin) {
-  scannedVin = vin;
-  editMode = false;
+  scannedVin = vin; editMode = false;
   closeCamera();
-
-  const display = document.getElementById('confirmVinDisplay');
-  const status = document.getElementById('confirmStatus');
-  const editField = document.getElementById('confirmEditField');
-
-  display.textContent = vin;
-  display.style.opacity = '1';
-  editField.style.display = 'none';
-  editField.value = vin;
-
-  if (vin.length === 17) {
-    status.textContent = '✓ 17 characters — looks right';
-    status.style.color = 'var(--green)';
-  } else {
-    status.textContent = `⚠ ${vin.length} of 17 characters — tap Edit to fix`;
-    status.style.color = '#a05800';
-  }
-
+  document.getElementById('sheetVin').textContent = vin;
+  document.getElementById('sheetVin').style.opacity = '1';
+  document.getElementById('sheetEdit').style.display = 'none';
+  const s = document.getElementById('sheetStatus');
+  if (vin.length === 17) { s.textContent = '✓ 17 characters — looks good'; s.style.color = 'var(--teal)'; }
+  else { s.textContent = `${vin.length} of 17 characters — tap Edit to fix`; s.style.color = 'var(--gold)'; }
   document.getElementById('confirmModal').classList.add('open');
 }
-
-function toggleEdit() {
+function toggleSheetEdit() {
   editMode = !editMode;
-  const editField = document.getElementById('confirmEditField');
-  const display = document.getElementById('confirmVinDisplay');
+  const ef = document.getElementById('sheetEdit');
+  const sv = document.getElementById('sheetVin');
   if (editMode) {
-    editField.style.display = 'block';
-    editField.value = scannedVin;
-    editField.focus();
-    display.style.opacity = '0.35';
-    editField.oninput = () => {
-      const v = editField.value.toUpperCase().replace(/[^A-HJ-NPR-Z0-9]/g,'');
-      editField.value = v;
-      scannedVin = v;
-      display.textContent = v;
-      const s = document.getElementById('confirmStatus');
-      s.textContent = v.length === 17 ? '✓ 17 characters — looks right' : `${v.length} of 17 characters`;
-      s.style.color = v.length === 17 ? 'var(--green)' : '#a05800';
+    ef.style.display = 'block'; ef.value = scannedVin; ef.focus();
+    sv.style.opacity = '0.3';
+    ef.oninput = () => {
+      const v = ef.value.toUpperCase().replace(/[^A-HJ-NPR-Z0-9]/g,'');
+      ef.value = v; scannedVin = v; sv.textContent = v;
+      const s = document.getElementById('sheetStatus');
+      s.textContent = v.length===17 ? '✓ 17 characters — looks good' : `${v.length} of 17 characters`;
+      s.style.color = v.length===17 ? 'var(--teal)' : 'var(--gold)';
     };
-  } else {
-    editField.style.display = 'none';
-    display.style.opacity = '1';
-  }
+  } else { ef.style.display='none'; sv.style.opacity='1'; }
 }
-
 function useScannedVin() {
   document.getElementById('confirmModal').classList.remove('open');
   document.getElementById('vinInput').value = scannedVin;
   onVinInput();
   doLookup();
 }
-
 function retryCamera() {
   document.getElementById('confirmModal').classList.remove('open');
-  setTimeout(openCamera, 250);
+  setTimeout(openCamera, 200);
 }
 
 // ── Loading steps ──
 const STEPS = [
   ['Decoding VIN…','Identifying year, make, model & trim'],
-  ['Searching Keller inventory…','Checking kellerusedcar.com & kellerfordhanford.com'],
-  ['Pulling vehicle details…','Price, mileage, features & options'],
+  ['Searching inventory…','Checking kellerusedcar.com & kellerfordhanford.com'],
+  ['Pulling market data…','Finding comparable vehicles & pricing'],
   ['Writing sales pitch…','Getting you ready to present'],
 ];
-let stepIdx = 0, stepTimer = null;
+let stepIdx=0, stepTimer=null;
 function startSteps() {
-  stepIdx = 0; setStep(0);
-  stepTimer = setInterval(() => { stepIdx = Math.min(stepIdx+1, STEPS.length-1); setStep(stepIdx); }, 2400);
+  stepIdx=0; setStep(0);
+  stepTimer = setInterval(()=>{ stepIdx=Math.min(stepIdx+1,3); setStep(stepIdx); }, 2400);
 }
 function stopSteps() { clearInterval(stepTimer); }
 function setStep(i) {
-  document.getElementById('loadingLabel').textContent = STEPS[i][0];
-  document.getElementById('loadingSub').textContent = STEPS[i][1];
+  document.getElementById('loadLabel').textContent = STEPS[i][0];
+  document.getElementById('loadSub').textContent = STEPS[i][1];
+  for(let j=0;j<4;j++) document.getElementById('dot'+j).classList.toggle('active',j<=i);
 }
 
 // ── Main lookup ──
@@ -653,82 +792,54 @@ async function doLookup() {
   if (vin.length < 11) return;
   showTab('loading');
   startSteps();
-
   try {
-    const response = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method:'POST', headers:{'Content-Type':'application/json'},
       body: JSON.stringify({
-        model: 'claude-sonnet-4-6',
-        max_tokens: 1200,
-        system: `You are an automotive data expert at Keller Ford & Keller Used Cars in Hanford, CA.
+        model:'claude-sonnet-4-6', max_tokens:1400,
+        system:`You are an automotive data expert at Keller Ford & Keller Used Cars, Hanford CA. Decode VINs accurately using real VIN position rules. Return ONLY valid JSON, no markdown.
+Dealer sites: kellerfordhanford.com and kellerusedcar.com.
+Always set listing_url to: https://www.google.com/search?q=site:kellerusedcar.com+OR+site:kellerfordhanford.com+"${vin}"`,
+        messages:[{role:'user',content:`Decode VIN: ${vin}
 
-Decode the VIN accurately using real VIN position rules:
-- Position 1-3: World Manufacturer Identifier
-- Position 4-8: Vehicle descriptor (body, engine, etc.)
-- Position 9: Check digit
-- Position 10: Model year (L=2020, M=2021, N=2022, P=2023, R=2024, S=2025)
-- Position 11: Plant
-- Position 12-17: Production sequence
-
-The dealer has two websites:
-- kellerfordhanford.com — new and used Ford vehicles
-- kellerusedcar.com — all used vehicles
-
-For the listing_url, construct a Google search URL that will find the actual listing:
-https://www.google.com/search?q=site:kellerusedcar.com+OR+site:kellerfordhanford.com+"${vin}"
-
-This ensures the salesperson can tap it and find the real listing page.
-
-Return ONLY valid JSON, no markdown, no explanation.`,
-        messages: [{
-          role: 'user',
-          content: `Decode this VIN and return vehicle data. VIN: ${vin}
-
-Return this exact JSON structure with accurate decoded values:
+Return this exact JSON with accurate decoded values and realistic market data:
 {
-  "vin": "${vin}",
-  "year": "",
-  "make": "",
-  "model": "",
-  "trim": "",
-  "body": "",
-  "engine": "",
-  "drivetrain": "",
-  "transmission": "",
-  "exterior_color": "Unknown — check sticker",
-  "interior_color": "Unknown — check sticker",
-  "mileage": "Check odometer",
-  "sale_price": "See window sticker",
-  "retail_price": "",
-  "stock": "",
-  "owners": 1,
-  "website": "kellerusedcar.com",
-  "listing_url": "https://www.google.com/search?q=site:kellerusedcar.com+OR+site:kellerfordhanford.com+%22${vin}%22",
-  "badges": ["Keller Inventory"],
-  "features": [],
-  "dealer_comment": "",
-  "pitch": ""
-}
-
-For features: list the top 6-8 real features this trim level typically includes.
-For pitch: write a confident, natural 2-3 sentence pitch a salesperson would say on the lot — mention year, model, trim, a standout feature, and invite the customer to get inside.`
-        }]
+  "vin":"${vin}","year":"","make":"","model":"","trim":"","body":"","engine":"","drivetrain":"","transmission":"","exterior_color":"See sticker","interior_color":"See sticker","mileage":"Check odometer","sale_price":"See sticker","retail_price":"","stock":"","owners":1,"website":"kellerusedcar.com",
+  "listing_url":"https://www.google.com/search?q=site:kellerusedcar.com+OR+site:kellerfordhanford.com+%22${vin}%22",
+  "badges":["Keller Inventory"],
+  "features":["Feature 1","Feature 2","Feature 3","Feature 4","Feature 5","Feature 6"],
+  "dealer_comment":"",
+  "pitch":"Confident natural 2-3 sentence salesperson pitch mentioning year, model, trim, a standout feature, and an invitation to get inside.",
+  "comparables":[
+    {"name":"Similar vehicle 1","miles":"XX,XXX mi","price":"$XX,XXX","delta":"lower"},
+    {"name":"Similar vehicle 2","miles":"XX,XXX mi","price":"$XX,XXX","delta":"higher"},
+    {"name":"Similar vehicle 3","miles":"XX,XXX mi","price":"$XX,XXX","delta":"same"}
+  ]
+}`}]
       })
     });
-
-    const data = await response.json();
-    const raw = data.content.map(b => b.text||'').join('').replace(/```json|```/g,'').trim();
+    const data = await res.json();
+    const raw = data.content.map(b=>b.text||'').join('').replace(/\`\`\`json|\`\`\`/g,'').trim();
     const vehicle = JSON.parse(raw);
-    currentVehicle = vehicle;
+    cv = vehicle;
     stopSteps();
-    saveToHistory(vehicle);
+    saveHistory(vehicle);
     renderResult(vehicle);
+    renderMarket(vehicle);
+    document.getElementById('tab-result').style.display = 'flex';
     showTab('result');
-
-  } catch(err) {
+  } catch(e) {
     stopSteps();
-    renderError(document.getElementById('vinInput').value);
+    document.getElementById('resultContent').innerHTML = `
+      <div style="padding:20px 14px;">
+        <div class="err-card">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          <strong>Could Not Decode VIN</strong>
+          <p>Check the VIN has exactly 17 characters with no I, O, or Q.<br><br><code style="font-size:11px;font-family:monospace;color:var(--w50)">${document.getElementById('vinInput').value}</code></p>
+          <button class="btn-try-again" onclick="showTab('scan')">Try Again</button>
+        </div>
+      </div>`;
+    document.getElementById('tab-result').style.display = 'flex';
     showTab('result');
   }
 }
@@ -736,188 +847,301 @@ For pitch: write a confident, natural 2-3 sentence pitch a salesperson would say
 // ── Render result ──
 function renderResult(v) {
   const savings = calcSavings(v.retail_price, v.sale_price);
-  document.getElementById('resultContent').innerHTML = `
+  const html = `
     <div class="result-hero">
-      <div class="result-img-placeholder">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 17H3a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11a2 2 0 0 1 2 2v3"/><rect x="9" y="11" width="14" height="10" rx="2"/><circle cx="12" cy="21" r="1"/><circle cx="20" cy="21" r="1"/></svg>
+      <div class="result-hero-car">
+        <svg viewBox="0 0 80 40"><path d="M10 28l5-15h50l5 15"/><rect x="6" y="28" width="68" height="10" rx="3"/><circle cx="18" cy="38" r="5"/><circle cx="62" cy="38" r="5"/><rect x="16" y="14" width="18" height="10" rx="2"/><rect x="36" y="13" width="20" height="11" rx="2"/></svg>
       </div>
-      <button class="back-btn" onclick="goBack()">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" width="18" height="18"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
-      </button>
-      <a class="listing-link-btn" href="${v.listing_url}" target="_blank">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="13" height="13"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-        Find Listing
-      </a>
-    </div>
-
-    <div class="result-info">
-      <div class="result-badge-row">
-        ${(v.badges||[]).map(b=>`<span class="badge badge-keller">${b}</span>`).join('')}
-      </div>
-      <div class="result-ymmt">${v.year} ${v.make} ${v.model}<br>${v.trim}</div>
-      <div class="result-vin">VIN: ${v.vin}</div>
-      <div class="price-row">
-        <span class="price-main">${v.sale_price}</span>
-        ${v.retail_price && v.retail_price !== v.sale_price ? `<span class="price-retail">${v.retail_price}</span>` : ''}
-        ${savings ? `<span class="price-save">Save ${savings}</span>` : ''}
-      </div>
-      <div class="stats-grid">
-        <div class="stat-cell"><div class="stat-cell-label">Mileage</div><div class="stat-cell-val">${v.mileage}</div></div>
-        <div class="stat-cell"><div class="stat-cell-label">Engine</div><div class="stat-cell-val">${v.engine}</div></div>
-        <div class="stat-cell"><div class="stat-cell-label">Drivetrain</div><div class="stat-cell-val">${v.drivetrain}</div></div>
-        <div class="stat-cell"><div class="stat-cell-label">Transmission</div><div class="stat-cell-val">${v.transmission}</div></div>
-        <div class="stat-cell"><div class="stat-cell-label">Exterior</div><div class="stat-cell-val">${v.exterior_color}</div></div>
-        <div class="stat-cell"><div class="stat-cell-label">Interior</div><div class="stat-cell-val">${v.interior_color}</div></div>
-        <div class="stat-cell"><div class="stat-cell-label">Owners</div><div class="stat-cell-val">${v.owners}-owner</div></div>
-        <div class="stat-cell"><div class="stat-cell-label">Stock #</div><div class="stat-cell-val">${v.stock||'—'}</div></div>
+      <div class="result-hero-overlay"></div>
+      <div class="result-hero-btns">
+        <button class="hero-btn" onclick="showTab('scan')"><svg viewBox="0 0 24 24"><path d="M19 12H5M12 5l-7 7 7 7"/></svg></button>
+        <a class="hero-listing-btn" href="${v.listing_url}" target="_blank">
+          <svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          Find Listing
+        </a>
       </div>
     </div>
 
-    <div class="notice-box">
-      💡 <strong>Find the listing:</strong> Tap <strong>Find Listing</strong> above — it searches both Keller websites for this exact VIN so you can pull up the real price, photos, and options.
+    <div class="result-body">
+      <div class="r-badges">
+        ${(v.badges||[]).map(b=>`<span class="r-badge r-badge-gold">${b}</span>`).join('')}
+      </div>
+      <div class="r-ymmt">${v.year} ${v.make} ${v.model}<br>${v.trim}</div>
+      <div class="r-vin">VIN: ${v.vin}</div>
+      <div class="r-price-row">
+        <span class="r-price">${v.sale_price}</span>
+        ${v.retail_price && v.retail_price!==v.sale_price?`<span class="r-retail">${v.retail_price}</span>`:''}
+        ${savings?`<span class="r-save">Save ${savings}</span>`:''}
+      </div>
+      <div class="r-stats">
+        <div class="r-stat"><div class="r-stat-label">Mileage</div><div class="r-stat-val">${v.mileage}</div></div>
+        <div class="r-stat"><div class="r-stat-label">Engine</div><div class="r-stat-val">${v.engine}</div></div>
+        <div class="r-stat"><div class="r-stat-label">Drivetrain</div><div class="r-stat-val">${v.drivetrain}</div></div>
+        <div class="r-stat"><div class="r-stat-label">Transmission</div><div class="r-stat-val">${v.transmission}</div></div>
+        <div class="r-stat"><div class="r-stat-label">Exterior</div><div class="r-stat-val">${v.exterior_color}</div></div>
+        <div class="r-stat"><div class="r-stat-label">Interior</div><div class="r-stat-val">${v.interior_color}</div></div>
+        <div class="r-stat"><div class="r-stat-label">Owners</div><div class="r-stat-val">${v.owners}-owner</div></div>
+        <div class="r-stat"><div class="r-stat-label">Stock #</div><div class="r-stat-val">${v.stock||'—'}</div></div>
+      </div>
     </div>
 
-    <div class="section">
-      <div class="section-hdr">
-        <div class="section-title">💬 Sales Pitch</div>
-        <button class="section-action" onclick="regeneratePitch()">Regenerate</button>
+    <!-- PITCH -->
+    <div class="r-section">
+      <div class="r-sec-hdr">
+        <span class="r-sec-title">Sales Pitch</span>
+        <button class="r-sec-btn" onclick="regeneratePitch()">Regenerate</button>
       </div>
       <div class="pitch-bubble" id="pitchBubble"></div>
-      <div class="btn-row">
-        <button class="btn-secondary" onclick="copyPitch()">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+      <div class="pitch-btns">
+        <button class="pitch-btn pitch-btn-outline" onclick="copyPitch()">
+          <svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
           Copy
         </button>
-        <button class="btn-primary-sm" onclick="shareVehicle()">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
-          Share
+        <button class="pitch-btn pitch-btn-solid" onclick="shareVehicle()">
+          <svg viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+          Share to Customer
         </button>
+      </div>
+      <button class="speech-btn" id="speechBtn" onclick="speakPitch()">
+        <svg viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+        Read Pitch Aloud
+      </button>
+    </div>
+
+    <!-- PAYMENT ESTIMATOR -->
+    <div class="r-section">
+      <div class="r-sec-hdr"><span class="r-sec-title">Payment Estimator</span></div>
+      <div class="estimator">
+        <div class="est-row">
+          <span class="est-label">Down</span>
+          <input class="est-slider" type="range" id="estDown" min="0" max="10000" step="500" value="2000" oninput="calcPayment()">
+          <span class="est-val" id="estDownVal">$2,000</span>
+        </div>
+        <div class="est-row">
+          <span class="est-label">Rate</span>
+          <input class="est-slider" type="range" id="estRate" min="3" max="18" step="0.5" value="7" oninput="calcPayment()">
+          <span class="est-val" id="estRateVal">7.0%</span>
+        </div>
+        <div class="est-row" style="margin-bottom:12px;">
+          <span class="est-label">Term</span>
+          <input class="est-slider" type="range" id="estTerm" min="24" max="84" step="12" value="60" oninput="calcPayment()">
+          <span class="est-val" id="estTermVal">60 mo</span>
+        </div>
+        <div class="est-result">
+          <div><div class="est-result-label">Est. monthly payment</div></div>
+          <div><div class="est-result-num" id="estPayment">$—</div><div class="est-result-sub">Principal + interest</div></div>
+        </div>
       </div>
     </div>
 
-    ${v.features && v.features.length ? `
-    <div class="section">
-      <div class="section-hdr"><div class="section-title">✅ Standard Features for This Trim</div></div>
-      <div class="features-list">${v.features.map(f=>`<div class="feature-row"><div class="feat-dot"></div><span style="font-size:15px;">${f}</span></div>`).join('')}</div>
-    </div>` : ''}
+    <!-- FEATURES -->
+    ${v.features&&v.features.length?`
+    <div class="r-section">
+      <div class="r-sec-hdr"><span class="r-sec-title">Key Features</span></div>
+      <div class="feat-list">${v.features.map(f=>`<div class="feat-row"><div class="feat-bullet"></div><div class="feat-text">${f}</div></div>`).join('')}</div>
+    </div>`:''}
 
-    <a class="listing-cta" href="${v.listing_url}" target="_blank">
-      <div class="cta-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div>
-      <div class="cta-text"><strong>Search Keller Websites for This VIN</strong><span>Opens Google search — kellerusedcar.com &amp; kellerfordhanford.com</span></div>
-      <div class="cta-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" width="18" height="18"><path d="M9 18l6-6-6-6"/></svg></div>
+    <!-- DEAL NOTES -->
+    <div class="r-section">
+      <div class="r-sec-hdr"><span class="r-sec-title">Deal Notes</span></div>
+      <textarea class="notes-area" id="notesArea" placeholder="Customer name, offer made, follow-up date, trade-in info…" oninput="autoResize(this)">${loadNote(v.vin)}</textarea>
+      <button class="notes-save-btn" onclick="saveNote()">Save Note</button>
+    </div>
+
+    <!-- LISTING CTA -->
+    <a class="listing-cta" href="${v.listing_url}" target="_blank" style="margin:2px 14px 0;display:flex;">
+      <div class="listing-cta-icon"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div>
+      <div class="listing-cta-text"><strong>Search Keller Websites</strong><span>Find this VIN on kellerusedcar.com &amp; kellerfordhanford.com</span></div>
+      <div class="listing-cta-arrow"><svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg></div>
     </a>
-    <div style="height:16px;"></div>`;
+    <div style="height:8px;"></div>`;
 
-  streamPitch(v.pitch || '');
+  document.getElementById('resultContent').innerHTML = html;
+  streamPitch(v.pitch||'');
+  calcPayment();
 }
 
-function renderError(vin) {
-  document.getElementById('resultContent').innerHTML = `
-    <div style="padding-top:40px;">
-      <div class="error-card">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-        <strong>Could Not Decode VIN</strong>
-        <p>Check that the VIN is exactly 17 characters and has no letters I, O, or Q.<br><br>VIN entered: <code style="font-size:12px;font-family:monospace;">${vin}</code></p>
-        <button class="btn-try-again" onclick="goBack()">Try Again</button>
-      </div>
+// ── Market page ──
+function renderMarket(v) {
+  if (!v||!v.comparables||!v.comparables.length) return;
+  const comps = v.comparables.map(c=>{
+    const cls = c.delta==='lower'?'comp-delta-low':c.delta==='higher'?'comp-delta-high':'comp-delta-same';
+    const label = c.delta==='lower'?'↓ Priced lower':c.delta==='higher'?'↑ Priced higher':'≈ Similar';
+    return `<div class="comp-item">
+      <div class="comp-info"><div class="comp-name">${c.name}</div><div class="comp-detail">${c.miles}</div></div>
+      <div class="comp-right"><div class="comp-price">${c.price}</div><div class="comp-delta ${cls}">${label}</div></div>
     </div>`;
+  }).join('');
+
+  document.getElementById('marketContent').innerHTML = `
+    <div class="r-sec-hdr" style="margin-bottom:12px;">
+      <span class="sec-label">Comps for ${v.year} ${v.make} ${v.model}</span>
+    </div>
+    ${comps}
+    <div style="margin-top:14px;padding:12px 14px;background:var(--w05);border:0.5px solid var(--border);border-radius:10px;">
+      <div style="font-size:11px;color:var(--w50);margin-bottom:4px;text-transform:uppercase;letter-spacing:0.06em;font-weight:600;">Keller asking price</div>
+      <div style="font-size:20px;font-weight:800;color:var(--gold);">${v.sale_price}</div>
+      ${v.retail_price&&v.retail_price!==v.sale_price?`<div style="font-size:12px;color:var(--w30);margin-top:2px;">Market retail: <span style="text-decoration:line-through">${v.retail_price}</span></div>`:''}
+    </div>`;
+
+  // Update market hero
+  document.querySelector('#market-page .market-hero p').textContent = `Showing comps for ${v.year} ${v.make} ${v.model} ${v.trim}`;
+  document.querySelector('#market-page .market-search').onclick = () => showTab('result');
+  document.querySelector('#market-page .market-search span').textContent = `Back to ${v.year} ${v.make} ${v.model}`;
 }
 
-// ── Pitch ──
+// ── Pitch streaming ──
 function streamPitch(text) {
   const box = document.getElementById('pitchBubble');
-  if (!box || !text) return;
+  if (!box||!text) return;
+  if (cv) cv.pitch = text;
   box.innerHTML = '<span class="pitch-cursor"></span>';
   const words = text.split(' ');
-  let i = 0;
+  let i=0;
   function next() {
-    if (i >= words.length) return;
-    const cur = box.querySelector('.pitch-cursor');
-    if (cur) cur.remove();
+    if (i>=words.length) return;
+    const c=box.querySelector('.pitch-cursor'); if(c) c.remove();
     box.appendChild(document.createTextNode((i===0?'':' ')+words[i]));
-    const c = document.createElement('span');
-    c.className = 'pitch-cursor';
-    box.appendChild(c);
-    i++;
-    setTimeout(next, 45 + Math.random()*35);
+    const cur=document.createElement('span'); cur.className='pitch-cursor'; box.appendChild(cur);
+    i++; setTimeout(next,45+Math.random()*35);
   }
   next();
 }
 
 async function regeneratePitch() {
-  if (!currentVehicle) return;
-  const box = document.getElementById('pitchBubble');
-  if (box) box.innerHTML = '<span class="pitch-cursor"></span>';
+  if (!cv) return;
+  const box=document.getElementById('pitchBubble');
+  if (box) box.innerHTML='<span class="pitch-cursor"></span>';
   try {
-    const v = currentVehicle;
-    const r = await fetch('https://api.anthropic.com/v1/messages', {
-      method:'POST', headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({
-        model:'claude-sonnet-4-6', max_tokens:300,
-        messages:[{role:'user',content:`Write a fresh 2-3 sentence car lot pitch for a ${v.year} ${v.make} ${v.model} ${v.trim} at Keller Ford/Used Cars in Hanford CA. Lead from a different angle — value, lifestyle, or a specific feature. Sound like a real salesperson, confident and natural. No quotes around the output.\n\nFeatures: ${(v.features||[]).slice(0,5).join(', ')}`}]
-      })
+    const r = await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:250,
+        messages:[{role:'user',content:`Write a fresh 2-3 sentence car lot pitch for a ${cv.year} ${cv.make} ${cv.model} ${cv.trim} at Keller Ford/Used Cars in Hanford CA. Lead from a different angle each time — value, lifestyle, features, or urgency. Sound like a real confident salesperson. No quotes.\n\nFeatures: ${(cv.features||[]).slice(0,5).join(', ')}\nPrice: ${cv.sale_price} | Miles: ${cv.mileage}`}]})
     });
-    const d = await r.json();
-    const pitch = d.content.map(b=>b.text||'').join('').trim();
-    currentVehicle.pitch = pitch;
-    streamPitch(pitch);
+    const d=await r.json();
+    const pitch=d.content.map(b=>b.text||'').join('').trim();
+    cv.pitch=pitch; streamPitch(pitch);
   } catch(e) { showToast('Could not regenerate'); }
 }
 
-// ── Utilities ──
-function goBack() { showTab('scan'); renderRecent(); }
+// ── Speech ──
+function speakPitch() {
+  if (!cv||!cv.pitch) return;
+  if (isSpeaking) { window.speechSynthesis.cancel(); setSpeaking(false); return; }
+  const utt = new SpeechSynthesisUtterance(cv.pitch);
+  utt.rate=0.92; utt.pitch=1; utt.volume=1;
+  utt.onstart=()=>setSpeaking(true);
+  utt.onend=()=>setSpeaking(false);
+  utt.onerror=()=>setSpeaking(false);
+  window.speechSynthesis.speak(utt);
+}
+function setSpeaking(on) {
+  isSpeaking=on;
+  const btn=document.getElementById('speechBtn');
+  if (!btn) return;
+  btn.classList.toggle('speaking',on);
+  btn.innerHTML = on
+    ? `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="15" height="15"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg> Stop Reading`
+    : `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="15" height="15"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg> Read Pitch Aloud`;
+}
 
+// ── Payment estimator ──
+function calcPayment() {
+  if (!cv) return;
+  const priceStr = cv.sale_price||'0';
+  const price = parseInt(priceStr.replace(/[^0-9]/g,''))||0;
+  const down = parseInt(document.getElementById('estDown').value)||0;
+  const rate = parseFloat(document.getElementById('estRate').value)||7;
+  const term = parseInt(document.getElementById('estTerm').value)||60;
+  document.getElementById('estDownVal').textContent = '$'+down.toLocaleString();
+  document.getElementById('estRateVal').textContent = rate.toFixed(1)+'%';
+  document.getElementById('estTermVal').textContent = term+' mo';
+  const principal = Math.max(0, price - down);
+  if (principal===0||rate===0) { document.getElementById('estPayment').textContent='$'+Math.round(principal/term).toLocaleString(); return; }
+  const r = rate/100/12;
+  const payment = principal*(r*Math.pow(1+r,term))/(Math.pow(1+r,term)-1);
+  document.getElementById('estPayment').textContent = '$'+Math.round(payment).toLocaleString();
+}
+
+// ── Notes ──
+function loadNote(vin) { try{return localStorage.getItem('note_'+vin)||'';}catch{return '';} }
+function saveNote() {
+  if (!cv) return;
+  const n=document.getElementById('notesArea').value;
+  try{localStorage.setItem('note_'+cv.vin,n);}catch{}
+  showToast('Note saved');
+}
+function autoResize(el) { el.style.height='auto'; el.style.height=el.scrollHeight+'px'; }
+
+// ── Actions ──
 function copyPitch() {
-  if (!currentVehicle?.pitch) return;
-  navigator.clipboard.writeText(currentVehicle.pitch)
+  if (!cv?.pitch) return;
+  navigator.clipboard.writeText(cv.pitch)
     .then(()=>showToast('Pitch copied!'))
-    .catch(()=>{ const t=document.createElement('textarea'); t.value=currentVehicle.pitch; document.body.appendChild(t); t.select(); document.execCommand('copy'); document.body.removeChild(t); showToast('Pitch copied!'); });
+    .catch(()=>{const t=document.createElement('textarea');t.value=cv.pitch;document.body.appendChild(t);t.select();document.execCommand('copy');document.body.removeChild(t);showToast('Pitch copied!');});
 }
-
 function shareVehicle() {
-  const v = currentVehicle; if (!v) return;
-  const text = `${v.year} ${v.make} ${v.model} ${v.trim}\n${v.sale_price} · ${v.mileage}\n\n${v.pitch}\n\n${v.listing_url||''}`;
-  if (navigator.share) navigator.share({title:`${v.year} ${v.make} ${v.model}`,text,url:v.listing_url||''});
-  else navigator.clipboard.writeText(text).then(()=>showToast('Copied!'));
-}
-
-function calcSavings(retail, sale) {
-  if (!retail||!sale) return null;
-  const r=parseInt(retail.replace(/[^0-9]/g,'')), s=parseInt(sale.replace(/[^0-9]/g,''));
-  if (isNaN(r)||isNaN(s)||r<=s) return null;
-  return '$'+(r-s).toLocaleString();
-}
-
-function showToast(msg) {
-  const t=document.getElementById('toast');
-  t.textContent=msg; t.classList.add('show');
-  setTimeout(()=>t.classList.remove('show'),2800);
+  if (!cv) return;
+  const text=`${cv.year} ${cv.make} ${cv.model} ${cv.trim}\n${cv.sale_price} · ${cv.mileage}\n\n${cv.pitch||''}\n\n${cv.listing_url||''}`;
+  if (navigator.share) navigator.share({title:`${cv.year} ${cv.make} ${cv.model}`,text,url:cv.listing_url||''});
+  else navigator.clipboard.writeText(text).then(()=>showToast('Details copied!'));
 }
 
 // ── History ──
-function getHistory() { try{return JSON.parse(localStorage.getItem(HISTORY_KEY)||'[]');}catch{return [];} }
-function saveToHistory(v) {
+function getHistory(){try{return JSON.parse(localStorage.getItem(HK)||'[]');}catch{return[];}}
+function saveHistory(v){
   let h=getHistory().filter(x=>x.vin!==v.vin);
   h.unshift({...v,viewed_at:new Date().toISOString()});
-  if(h.length>30) h=h.slice(0,30);
-  localStorage.setItem(HISTORY_KEY,JSON.stringify(h));
+  if(h.length>30)h=h.slice(0,30);
+  localStorage.setItem(HK,JSON.stringify(h));
 }
-function clearHistory() {
-  if(confirm('Clear all history?')){ localStorage.removeItem(HISTORY_KEY); renderHistory(); renderRecent(); }
+function clearHistory(){if(confirm('Clear all history?')){localStorage.removeItem(HK);renderHistory();renderRecent();}}
+function renderHistory(){
+  const h=getHistory(),el=document.getElementById('histList');
+  if(!h.length){el.innerHTML=`<div class="hist-empty"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg><p>No lookups yet — scan a VIN to get started</p></div>`;return;}
+  el.innerHTML=h.map((v,i)=>`
+    <div class="hist-item" onclick="loadFromHistory(${i})">
+      <div class="hist-car-icon"><svg viewBox="0 0 24 24"><path d="M5 17H3a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11a2 2 0 0 1 2 2v3"/><rect x="9" y="11" width="14" height="10" rx="2"/><circle cx="12" cy="21" r="1"/><circle cx="20" cy="21" r="1"/></svg></div>
+      <div class="hist-info">
+        <div class="hist-name">${v.year} ${v.make} ${v.model} ${v.trim}</div>
+        <div class="hist-sub">${v.mileage} · ${new Date(v.viewed_at).toLocaleDateString()}</div>
+        <div class="hist-vin-text">${v.vin}</div>
+      </div>
+      <div class="hist-price">${v.sale_price}</div>
+    </div>`).join('');
 }
-function renderHistory() {
-  const h=getHistory(), el=document.getElementById('histList');
-  if(!h.length){ el.innerHTML=`<div class="hist-empty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg><p>No lookups yet</p></div>`; return; }
-  el.innerHTML=h.map((v,i)=>`<div class="hist-item" onclick="loadFromHistory(${i})"><div class="hist-info"><strong>${v.year} ${v.make} ${v.model} ${v.trim}</strong><span>${v.mileage} · ${new Date(v.viewed_at).toLocaleDateString()}</span><span style="font-size:11px;font-family:monospace;color:var(--sub);">${v.vin}</span></div><div class="hist-price">${v.sale_price}</div></div>`).join('');
-}
-function renderRecent() {
-  const h=getHistory().slice(0,3), wrap=document.getElementById('recentlyViewed');
+function renderRecent(){
+  const h=getHistory().slice(0,3),wrap=document.getElementById('recentWrap');
   if(!h.length){wrap.style.display='none';return;}
   wrap.style.display='block';
-  document.getElementById('recentList').innerHTML=h.map((v,i)=>`<div class="rv-item" onclick="loadFromHistory(${i})"><div class="rv-info"><strong>${v.year} ${v.make} ${v.model}</strong><span>${v.trim} · ${v.mileage}</span></div><div class="rv-price">${v.sale_price}</div></div>`).join('');
+  document.getElementById('recentList').innerHTML=h.map((v,i)=>`
+    <div class="rv-item" onclick="loadFromHistory(${i})">
+      <div class="rv-dot"><svg viewBox="0 0 24 24"><path d="M5 17H3a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11a2 2 0 0 1 2 2v3"/><rect x="9" y="11" width="14" height="10" rx="2"/><circle cx="12" cy="21" r="1"/><circle cx="20" cy="21" r="1"/></svg></div>
+      <div class="rv-info"><div class="rv-name">${v.year} ${v.make} ${v.model}</div><div class="rv-sub">${v.trim} · ${v.mileage}</div></div>
+      <div class="rv-price">${v.sale_price}</div>
+    </div>`).join('');
 }
-function loadFromHistory(i) { const v=getHistory()[i]; if(!v) return; currentVehicle=v; renderResult(v); showTab('result'); }
+function loadFromHistory(i){
+  const v=getHistory()[i]; if(!v) return;
+  cv=v; renderResult(v); renderMarket(v);
+  document.getElementById('tab-result').style.display='flex';
+  showTab('result');
+}
 
+// ── Utils ──
+function calcSavings(retail,sale){
+  if(!retail||!sale) return null;
+  const r=parseInt(retail.replace(/[^0-9]/g,'')),s=parseInt(sale.replace(/[^0-9]/g,''));
+  if(isNaN(r)||isNaN(s)||r<=s) return null;
+  return '$'+(r-s).toLocaleString();
+}
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2600);
+}
+
+// ── Init ──
 renderRecent();
 </script>
 </body>
