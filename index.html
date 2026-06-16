@@ -717,183 +717,152 @@ async function captureFrame() {
   if (!video.videoWidth) { showToast('Camera not ready — wait a moment'); return; }
 
   scanAttempts++;
-  const attemptsEl = document.getElementById('camAttempts');
-  attemptsEl.style.visibility = 'visible';
-  attemptsEl.textContent = `Attempt ${scanAttempts}`;
-
-  // Flash the scan window
   const win = document.getElementById('camScanWindow');
   win.classList.add('flash');
-  setTimeout(() => win.classList.remove('flash'), 350);
+  setTimeout(() => win.classList.remove('flash'), 300);
 
-  // Grab full resolution frame
+  // ── Capture full native resolution frame ──
   const canvas = document.getElementById('camCanvas');
-  canvas.width = video.videoWidth;
+  canvas.width  = video.videoWidth;
   canvas.height = video.videoHeight;
   const ctx = canvas.getContext('2d');
   ctx.drawImage(video, 0, 0);
 
+  // ── Resize to a sensible size for the API ──
+  // Claude Vision works great at 1280px wide — no need for full 4K
+  // Sending the full-resolution 4K image hits payload limits and is slower
+  const MAX_W = 1280;
+  const scale = Math.min(1, MAX_W / canvas.width);
+  const outW  = Math.round(canvas.width  * scale);
+  const outH  = Math.round(canvas.height * scale);
+
+  const out = document.createElement('canvas');
+  out.width = outW; out.height = outH;
+  const octx = out.getContext('2d');
+  octx.imageSmoothingEnabled = true;
+  octx.imageSmoothingQuality = 'high';
+  octx.drawImage(canvas, 0, 0, outW, outH);
+
+  const base64 = out.toDataURL('image/jpeg', 0.92).split(',')[1];
+
+  // Show debug preview so you can see exactly what Claude receives
+  showDebugPreview(out);
+
   document.getElementById('camProc').classList.add('show');
-  updateProcStatus('Analyzing image…', 'Sending to Claude Vision');
+  document.getElementById('procLabel').textContent  = 'Reading VIN…';
+  document.getElementById('procSub').textContent    = 'Claude Vision scanning full image';
+  document.getElementById('procAttempts').textContent = `Tap ${scanAttempts}`;
 
-  // Generate 4 image variants to maximize read accuracy
-  const variants = await generateVariants(canvas);
-
-  // Try each variant, stop at first confident result
-  let bestVin = null;
-  let variantNames = ['Original', 'Brightened', 'High contrast', 'Inverted'];
-
-  for (let i = 0; i < variants.length; i++) {
-    updateProcStatus(`Reading VIN… (${i+1}/${variants.length})`, `Trying ${variantNames[i]} image`);
-    document.getElementById('procAttempts').textContent = `Attempt ${scanAttempts} · Variant ${i+1} of ${variants.length}`;
-
-    const result = await readVinWithVision(variants[i]);
-    if (result && result.length >= 11) {
-      // Validate — real VINs start with a WMI (position 1 is a letter, not 0-9)
-      if (/^[A-HJ-NPR-Z]/.test(result)) {
-        bestVin = result;
-        break;
-      } else if (!bestVin) {
-        bestVin = result; // Keep as fallback even if WMI looks off
-      }
-    }
-  }
-
-  document.getElementById('camProc').classList.remove('show');
-
-  if (bestVin) {
-    win.classList.add('success');
-    setTimeout(() => win.classList.remove('success'), 1000);
-    showConfirmModal(bestVin);
-  } else {
-    // Give contextual guidance after failures
-    const guide = document.getElementById('camGuideText');
-    if (scanAttempts === 1) {
-      guide.textContent = 'Move closer — fill the box with the VIN row';
-      guide.style.color = 'var(--gold)';
-    } else if (scanAttempts === 2) {
-      guide.textContent = 'Try the torch button for better contrast';
-      guide.style.color = 'var(--gold)';
-    } else {
-      guide.textContent = 'Tilt slightly to reduce glare if on a sticker';
-      guide.style.color = 'var(--gold)';
-    }
-    showToast('No VIN found — adjust and try again');
-  }
-}
-
-// Generate 4 preprocessed variants of the scan zone
-async function generateVariants(sourceCanvas) {
-  // Crop to scan window zone (middle 50% height, full width with small padding)
-  const sx = Math.floor(sourceCanvas.width * 0.02);
-  const sy = Math.floor(sourceCanvas.height * 0.25);
-  const sw = Math.floor(sourceCanvas.width * 0.96);
-  const sh = Math.floor(sourceCanvas.height * 0.50);
-
-  // Upscale 2x for better OCR
-  const W = sw * 2, H = sh * 2;
-
-  function makeCanvas() {
-    const c = document.createElement('canvas');
-    c.width = W; c.height = H;
-    return c;
-  }
-
-  function drawCrop(c) {
-    const ctx = c.getContext('2d');
-    ctx.imageSmoothingEnabled = true;
-    ctx.imageSmoothingQuality = 'high';
-    ctx.drawImage(sourceCanvas, sx, sy, sw, sh, 0, 0, W, H);
-    return ctx;
-  }
-
-  // Variant 1: Original (slightly sharpened)
-  const c1 = makeCanvas(); drawCrop(c1);
-
-  // Variant 2: Brightened (+60 brightness, useful for dark door jambs)
-  const c2 = makeCanvas(); const ctx2 = drawCrop(c2);
-  const id2 = ctx2.getImageData(0,0,W,H);
-  adjustPixels(id2.data, { brightness: 60, contrast: 20 });
-  ctx2.putImageData(id2,0,0);
-
-  // Variant 3: High contrast grayscale (good for printed stickers)
-  const c3 = makeCanvas(); const ctx3 = drawCrop(c3);
-  const id3 = ctx3.getImageData(0,0,W,H);
-  adjustPixels(id3.data, { grayscale: true, contrast: 80 });
-  ctx3.putImageData(id3,0,0);
-
-  // Variant 4: Inverted high contrast (for light text on dark backgrounds)
-  const c4 = makeCanvas(); const ctx4 = drawCrop(c4);
-  const id4 = ctx4.getImageData(0,0,W,H);
-  adjustPixels(id4.data, { grayscale: true, contrast: 80, invert: true });
-  ctx4.putImageData(id4,0,0);
-
-  return [c1,c2,c3,c4].map(c => c.toDataURL('image/jpeg', 0.92).split(',')[1]);
-}
-
-function adjustPixels(data, opts={}) {
-  for (let i=0; i<data.length; i+=4) {
-    let r=data[i], g=data[i+1], b=data[i+2];
-    if (opts.grayscale) { r=g=b=Math.round(0.299*r+0.587*g+0.114*b); }
-    if (opts.brightness) { r=clamp(r+opts.brightness); g=clamp(g+opts.brightness); b=clamp(b+opts.brightness); }
-    if (opts.contrast) {
-      const f = (259*(opts.contrast+255))/(255*(259-opts.contrast));
-      r=clamp(f*(r-128)+128); g=clamp(f*(g-128)+128); b=clamp(f*(b-128)+128);
-    }
-    if (opts.invert) { r=255-r; g=255-g; b=255-b; }
-    data[i]=r; data[i+1]=g; data[i+2]=b;
-  }
-}
-function clamp(v){ return Math.max(0,Math.min(255,Math.round(v))); }
-
-async function readVinWithVision(base64) {
   try {
     const response = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         model: 'claude-sonnet-4-6',
-        max_tokens: 60,
-        messages: [{
-          role: 'user',
-          content: [
-            { type:'image', source:{ type:'base64', media_type:'image/jpeg', data:base64 } },
-            { type:'text', text:`You are reading a Vehicle Identification Number (VIN) from a photo taken in a car dealership. The photo may show a door jamb sticker, dashboard plate, window sticker, title document, or any printed label.
+        max_tokens: 200,
+        messages: [
+          {
+            role: 'user',
+            content: [
+              {
+                type: 'image',
+                source: { type: 'base64', media_type: 'image/jpeg', data: base64 }
+              },
+              {
+                type: 'text',
+                text: `This photo was taken inside a car dealership. Find the Vehicle Identification Number (VIN).
 
-STRICT VIN RULES:
-- Exactly 17 characters long
-- Only these characters are valid: A B C D E F G H J K L M N P R S T U V W X Y Z 0 1 2 3 4 5 6 7 8 9
-- The letters I, O, Q are NEVER in a VIN — if you see them, they are misreads:
-  • I → 1
-  • O → 0  
-  • Q → 0
-- Position 1 is always a letter (country of manufacture)
-- Position 9 is a check digit (0-9 or X)
-- VINs often appear with spaces or dashes every few characters on stickers — ignore separators
+The VIN could appear ANYWHERE in this image — look at every label, sticker, plate, or printed text you can see. Common locations: door jamb sticker, dashboard trim plate, windshield lower-left corner, window sticker, title document, odometer sticker.
 
-COMMON MISREADS TO CORRECT:
-- B vs 8 — look at curves
-- D vs 0 — D has a flat edge
-- S vs 5 — context of surrounding chars
-- Z vs 2 — look carefully
-- G vs 6 — G has a horizontal bar
-- U vs 0 — U is open at bottom
+VIN format rules:
+- Always exactly 17 characters
+- Valid chars only: A-H, J-N, P-R, S-Z, 0-9  (no I, O, or Q ever)
+- Always starts with a letter
+- Often printed in groups with spaces or dashes — strip all separators
 
-INSTRUCTIONS:
-1. Scan the entire image for any 17-character alphanumeric sequence
-2. The VIN may be labeled "VIN:", "V.I.N.", or have no label
-3. Remove all spaces, dashes, and separators
-4. Apply all character corrections above
-5. Return ONLY the 17-character VIN — no other text, no explanation
-6. If you truly cannot find a VIN, return: NONE` }
-          ]
-        }]
+Character correction (apply before returning):
+- Letter O or Q seen → use digit 0
+- Letter I seen → use digit 1
+- Digit 1 that looks like letter I → keep as 1
+- Ambiguous B/8, S/5, Z/2, G/6 — use context of surrounding chars
+
+Your response must be ONLY one of:
+- The 17-character VIN with no spaces, punctuation, or explanation
+- The word NONE if you genuinely cannot see any VIN text in the image
+
+Do not guess. Do not make up characters. If the image is too blurry or the VIN is not visible, say NONE.`
+              }
+            ]
+          }
+        ]
       })
     });
-    const data = await response.json();
-    const raw = (data.content?.[0]?.text || '').trim().toUpperCase().replace(/[^A-HJ-NPR-Z0-9]/g,'');
-    return raw === 'NONE' || raw.length === 0 ? null : raw.slice(0,17);
-  } catch(e) { return null; }
+
+    const data     = await response.json();
+    const rawText  = (data.content?.[0]?.text || '').trim().toUpperCase();
+    const cleaned  = rawText.replace(/[^A-HJ-NPR-Z0-9]/g, '');
+
+    document.getElementById('camProc').classList.remove('show');
+
+    if (!cleaned || cleaned === 'NONE' || cleaned.length < 11) {
+      // Update guide text with progressive tips
+      const guide = document.getElementById('camGuideText');
+      const tips = [
+        'Move closer — VIN text should be readable size',
+        'Try the torch button — door jambs need light',
+        'Hold phone parallel to sticker, avoid angle',
+        'Reduce glare — tilt slightly away from light',
+      ];
+      guide.textContent  = tips[Math.min(scanAttempts - 1, tips.length - 1)];
+      guide.style.color  = 'var(--gold)';
+      const attemptsEl   = document.getElementById('camAttempts');
+      attemptsEl.style.visibility = 'visible';
+      attemptsEl.textContent = `Tap ${scanAttempts} · ${guide.textContent}`;
+      showToast('No VIN found — see tip above');
+    } else {
+      win.classList.add('success');
+      setTimeout(() => win.classList.remove('success'), 800);
+      hideDebugPreview();
+      showConfirmModal(cleaned.slice(0, 17));
+    }
+
+  } catch(e) {
+    document.getElementById('camProc').classList.remove('show');
+    console.error('Vision error:', e);
+    showToast('Network error — check connection and try again');
+  }
+}
+
+// ── Debug preview — shows the exact image sent to Claude ──
+// Tap it to dismiss. Helps you understand why a scan failed.
+function showDebugPreview(canvas) {
+  let el = document.getElementById('debugPreview');
+  if (!el) {
+    el = document.createElement('div');
+    el.id = 'debugPreview';
+    el.style.cssText = `
+      position:fixed; bottom:calc(env(safe-area-inset-bottom) + 80px); left:50%;
+      transform:translateX(-50%); z-index:150; background:rgba(0,0,0,0.85);
+      border:1px solid rgba(240,165,0,0.5); border-radius:10px; overflow:hidden;
+      display:flex; flex-direction:column; align-items:center; gap:0;
+      max-width:calc(100vw - 32px);
+    `;
+    const label = document.createElement('div');
+    label.textContent = 'Image sent to Claude — tap to dismiss';
+    label.style.cssText = 'font-size:10px;color:rgba(255,255,255,0.5);padding:5px 10px;width:100%;text-align:center;';
+    const img = document.createElement('img');
+    img.id = 'debugImg';
+    img.style.cssText = 'width:100%;max-width:320px;max-height:160px;object-fit:contain;display:block;';
+    el.appendChild(label);
+    el.appendChild(img);
+    el.onclick = () => el.remove();
+    document.body.appendChild(el);
+  }
+  document.getElementById('debugImg').src = canvas.toDataURL('image/jpeg', 0.7);
+}
+function hideDebugPreview() {
+  const el = document.getElementById('debugPreview');
+  if (el) el.remove();
 }
 
 function updateProcStatus(label, sub) {
