@@ -686,7 +686,10 @@ let isSpeaking = false;
 let currentPitchMode = 'walkaround';
 let currentPitchFocus = 'daily';
 const HK = 'keller_scout_v4';
-const CONFIG = window.KELLER_SCOUT_CONFIG || {};
+const CONFIG = {
+  visionEndpoint: '/api/vision-vin',
+  ...(window.KELLER_SCOUT_CONFIG || {})
+};
 const API_TIMEOUT_MS = 12000;
 
 // ── Tabs ──
@@ -1130,6 +1133,7 @@ async function captureFrame() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ image: base64, mediaType: 'image/jpeg' })
       });
+      if (data.error) throw new Error(data.error);
       cleaned = (data.vin || data.text || '').toUpperCase().replace(/[^A-HJ-NPR-Z0-9]/g, '');
     } else if ('BarcodeDetector' in window) {
       document.getElementById('procSub').textContent = 'Checking for a VIN barcode';
@@ -1170,7 +1174,7 @@ async function captureFrame() {
   } catch(e) {
     document.getElementById('camProc').classList.remove('show');
     console.error('Vision error:', e);
-    showToast(CONFIG.visionEndpoint ? 'VIN scan failed — try again or enter manually' : 'Camera scan needs AI backend — enter VIN manually');
+    showToast(e.message && e.message.includes('OPENAI_API_KEY') ? 'Set OPENAI_API_KEY on the server to enable scan' : 'VIN scan failed — try again or enter manually');
   }
 }
 
