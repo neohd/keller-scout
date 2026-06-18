@@ -12,17 +12,17 @@
 <title>Keller Scout</title>
 <style>
 :root {
-  --navy: #0a0f1e;
-  --navy2: #0d1628;
-  --navy3: #111827;
-  --navy4: #1a2540;
-  --gold: #f0a500;
-  --gold-dim: rgba(240,165,0,0.15);
-  --gold-text: #f0a500;
-  --teal: #3dcca0;
-  --teal-dim: rgba(61,204,160,0.15);
-  --blue: #4a90d9;
-  --blue-dim: rgba(74,144,217,0.15);
+  --navy: #101319;
+  --navy2: #151a22;
+  --navy3: #1b212b;
+  --navy4: #242c38;
+  --gold: #d89b2b;
+  --gold-dim: rgba(216,155,43,0.16);
+  --gold-text: #e7b65a;
+  --teal: #49c5a3;
+  --teal-dim: rgba(73,197,163,0.14);
+  --blue: #6da8d8;
+  --blue-dim: rgba(109,168,216,0.14);
   --red: #e05a5a;
   --red-dim: rgba(224,90,90,0.15);
   --white: #ffffff;
@@ -271,20 +271,47 @@ html, body { height: 100%; background: var(--navy); font-family: -apple-system, 
 .load-dot.active { background:var(--gold); }
 
 /* ── RESULT PAGE ── */
-.result-hero {
-  position:relative; height:210px;
-  background:linear-gradient(160deg, var(--navy2) 0%, var(--navy4) 100%);
-  display:flex; align-items:center; justify-content:center; overflow:hidden;
+.coach-hero {
+  background:linear-gradient(160deg, var(--navy2) 0%, #0d1f3c 100%);
+  padding:14px 14px 12px;
+  border-bottom:0.5px solid var(--border);
 }
-.result-hero-car svg { width:90px; height:90px; stroke:var(--w08); fill:none; stroke-width:1; stroke-linecap:round; stroke-linejoin:round; }
-.result-hero-overlay { position:absolute; inset:0; background:linear-gradient(to bottom, transparent 40%, var(--navy3) 100%); }
-.result-hero-btns { position:absolute; top:calc(var(--safe-top)+10px); left:0; right:0; display:flex; align-items:center; justify-content:space-between; padding:0 14px; }
-.hero-btn { background:rgba(0,0,0,0.5); border:none; border-radius:50%; width:34px; height:34px; display:flex; align-items:center; justify-content:center; cursor:pointer; backdrop-filter:blur(8px); }
-.hero-btn svg { width:16px; height:16px; stroke:#fff; fill:none; stroke-width:2.2; stroke-linecap:round; stroke-linejoin:round; }
-.hero-listing-btn { background:rgba(0,0,0,0.5); border:none; border-radius:20px; padding:7px 12px; display:flex; align-items:center; gap:5px; cursor:pointer; backdrop-filter:blur(8px); font-size:12px; font-weight:600; color:#fff; text-decoration:none; }
-.hero-listing-btn svg { width:12px; height:12px; stroke:#fff; fill:none; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
+.coach-top { display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:12px; }
+.coach-back { width:34px; height:34px; border-radius:50%; border:none; background:rgba(0,0,0,0.32); display:flex; align-items:center; justify-content:center; cursor:pointer; flex-shrink:0; }
+.coach-back svg { width:16px; height:16px; stroke:#fff; fill:none; stroke-width:2.2; stroke-linecap:round; stroke-linejoin:round; }
+.coach-status { font-size:11px; font-weight:700; color:var(--gold); text-transform:uppercase; letter-spacing:0.06em; }
+.coach-listing { color:var(--white); text-decoration:none; background:rgba(255,255,255,0.08); border:0.5px solid rgba(255,255,255,0.13); border-radius:18px; padding:7px 10px; font-size:12px; font-weight:700; display:flex; align-items:center; gap:5px; white-space:nowrap; }
+.coach-listing svg { width:12px; height:12px; stroke:currentColor; fill:none; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
+.coach-title { font-size:24px; font-weight:850; color:var(--white); letter-spacing:-0.4px; line-height:1.12; margin-bottom:5px; }
+.coach-vin { font-size:11px; color:var(--w50); font-family:'SF Mono',monospace; letter-spacing:0.04em; margin-bottom:12px; }
+.coach-facts { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+.coach-fact { background:rgba(255,255,255,0.07); border:0.5px solid rgba(255,255,255,0.12); border-radius:10px; padding:10px 11px; min-width:0; }
+.coach-fact-label { font-size:10px; color:var(--w50); text-transform:uppercase; letter-spacing:0.05em; margin-bottom:3px; font-weight:700; }
+.coach-fact-value { font-size:15px; font-weight:800; color:var(--white); overflow-wrap:anywhere; }
+.coach-fact-value.price { color:var(--gold); font-size:18px; letter-spacing:-0.2px; }
+.coach-fact-value.placeholder { color:var(--w50); font-size:14px; font-weight:650; }
 
-.result-body { background:var(--navy3); padding:16px 14px 0; }
+.result-body { background:var(--navy3); padding:0; }
+.pitch-card { background:var(--navy3); padding:14px; border-bottom:0.5px solid var(--border); }
+.pitch-eyebrow { font-size:11px; font-weight:800; color:var(--gold); text-transform:uppercase; letter-spacing:0.08em; margin-bottom:8px; }
+.quick-actions { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:10px; }
+.pitch-modes { display:flex; gap:7px; overflow-x:auto; padding:9px 0 1px; -webkit-overflow-scrolling:touch; }
+.pitch-mode { border:0.5px solid var(--border); background:var(--w05); color:var(--w70); border-radius:18px; padding:7px 10px; font-size:12px; font-weight:800; white-space:nowrap; cursor:pointer; }
+.pitch-mode.active { background:var(--gold-dim); border-color:rgba(240,165,0,0.4); color:var(--gold); }
+.pitch-focus-label { font-size:10px; font-weight:800; color:var(--w30); text-transform:uppercase; letter-spacing:0.08em; margin-top:10px; }
+.pitch-focuses { display:flex; gap:7px; overflow-x:auto; padding:7px 0 1px; -webkit-overflow-scrolling:touch; }
+.pitch-focus { border:0.5px solid var(--border); background:transparent; color:var(--w50); border-radius:18px; padding:6px 10px; font-size:12px; font-weight:750; white-space:nowrap; cursor:pointer; }
+.pitch-focus.active { background:var(--blue-dim); border-color:rgba(74,144,217,0.38); color:var(--blue); }
+.quick-action { padding:12px 10px; border-radius:10px; font-size:13px; font-weight:800; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:7px; min-height:44px; }
+.quick-action svg { width:15px; height:15px; stroke:currentColor; fill:none; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
+.quick-action.primary { background:var(--gold); border:none; color:var(--navy); }
+.quick-action.secondary { background:var(--w05); border:0.5px solid var(--border); color:var(--w90); }
+.quick-action.wide { grid-column:1 / -1; }
+.detail-strip { display:flex; gap:8px; overflow-x:auto; padding:12px 14px; background:var(--navy3); border-bottom:0.5px solid var(--border); -webkit-overflow-scrolling:touch; }
+.detail-pill { min-width:132px; background:var(--w05); border:0.5px solid var(--border); border-radius:10px; padding:10px 11px; }
+.detail-pill-label { font-size:10px; color:var(--w30); font-weight:700; text-transform:uppercase; letter-spacing:0.05em; margin-bottom:3px; }
+.detail-pill-value { font-size:13px; color:var(--w90); font-weight:650; line-height:1.35; overflow-wrap:anywhere; }
+.detail-pill-value.placeholder { color:var(--w50); }
 .r-badges { display:flex; gap:6px; flex-wrap:wrap; margin-bottom:10px; }
 .r-badge { font-size:10px; font-weight:700; padding:3px 9px; border-radius:5px; letter-spacing:0.02em; }
 .r-badge-gold { background:var(--gold-dim); color:var(--gold); }
@@ -304,13 +331,13 @@ html, body { height: 100%; background: var(--navy); font-family: -apple-system, 
 .r-stat-val { font-size:14px; font-weight:600; color:var(--w90); }
 
 /* Sections */
-.r-section { background:var(--navy3); padding:14px; margin-top:2px; }
+.r-section { background:var(--navy3); padding:14px; margin-top:2px; border-top:0.5px solid var(--border); }
 .r-sec-hdr { display:flex; align-items:center; justify-content:space-between; margin-bottom:11px; }
 .r-sec-title { font-size:11px; font-weight:700; color:var(--w30); text-transform:uppercase; letter-spacing:0.07em; }
 .r-sec-btn { font-size:12px; color:var(--blue); background:none; border:none; cursor:pointer; font-weight:500; }
 
 /* Pitch */
-.pitch-bubble { background:var(--w05); border-left:2.5px solid var(--gold); border-radius:0 10px 10px 10px; padding:12px 14px; font-size:15px; line-height:1.65; color:var(--w90); margin-bottom:12px; min-height:56px; }
+.pitch-bubble { background:var(--w05); border-left:2.5px solid var(--gold); border-radius:0 10px 10px 10px; padding:12px 14px; font-size:15px; line-height:1.6; color:var(--w90); min-height:56px; }
 .pitch-cursor { display:inline-block; width:2px; height:1em; background:var(--gold); vertical-align:middle; margin-left:2px; animation:blink 0.9s step-end infinite; }
 @keyframes blink { 50%{opacity:0} }
 .pitch-btns { display:flex; gap:8px; }
@@ -320,9 +347,9 @@ html, body { height: 100%; background: var(--navy); font-family: -apple-system, 
 .pitch-btn-solid { background:var(--gold); border:none; color:var(--navy); }
 
 /* Speech btn */
-.speech-btn { width:100%; padding:12px; background:var(--w05); border:0.5px solid var(--border); border-radius:10px; font-size:13px; font-weight:600; color:var(--w70); cursor:pointer; display:flex; align-items:center; justify-content:center; gap:8px; margin-top:8px; }
+.speech-btn { width:100%; padding:12px; background:var(--w05); border:0.5px solid var(--border); border-radius:10px; font-size:13px; font-weight:700; color:var(--w70); cursor:pointer; display:flex; align-items:center; justify-content:center; gap:8px; margin-top:8px; }
 .speech-btn svg { width:15px; height:15px; stroke:currentColor; fill:none; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
-.speech-btn.speaking { background:var(--teal-dim); border-color:var(--teal); color:var(--teal); }
+.speech-btn.speaking, .quick-action.speaking { background:var(--teal-dim); border-color:var(--teal); color:var(--teal); }
 
 /* Features list */
 .feat-list { display:flex; flex-direction:column; gap:7px; }
@@ -332,8 +359,13 @@ html, body { height: 100%; background: var(--navy); font-family: -apple-system, 
 
 /* Payment estimator */
 .estimator { background:var(--w05); border:0.5px solid var(--border); border-radius:12px; padding:14px; }
+.est-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:12px; }
+.est-field { min-width:0; }
+.est-label { font-size:10px; color:var(--w50); display:block; margin-bottom:5px; text-transform:uppercase; letter-spacing:0.05em; font-weight:800; }
+.est-input { width:100%; min-height:42px; background:var(--navy3); border:0.5px solid var(--border-strong); border-radius:10px; color:var(--white); font-size:16px; font-weight:750; padding:9px 10px; outline:none; }
+.est-input:focus { border-color:var(--gold); }
+.est-note { font-size:11px; color:var(--w50); line-height:1.45; margin-top:8px; }
 .est-row { display:flex; align-items:center; gap:10px; margin-bottom:10px; }
-.est-label { font-size:12px; color:var(--w50); width:70px; flex-shrink:0; }
 .est-slider { flex:1; -webkit-appearance:none; appearance:none; height:3px; border-radius:2px; background:var(--border-strong); outline:none; }
 .est-slider::-webkit-slider-thumb { -webkit-appearance:none; width:18px; height:18px; border-radius:50%; background:var(--gold); cursor:pointer; }
 .est-val { font-size:13px; font-weight:700; color:var(--white); width:50px; text-align:right; flex-shrink:0; }
@@ -341,6 +373,15 @@ html, body { height: 100%; background: var(--navy); font-family: -apple-system, 
 .est-result-label { font-size:12px; color:var(--w50); }
 .est-result-num { font-size:22px; font-weight:800; color:var(--gold); }
 .est-result-sub { font-size:10px; color:var(--w30); margin-top:1px; text-align:right; }
+
+/* Benefits */
+.benefit-grid { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+.benefit-card { background:var(--w05); border:0.5px solid var(--border); border-radius:10px; padding:11px; min-height:82px; }
+.benefit-label { font-size:10px; font-weight:800; color:var(--gold); text-transform:uppercase; letter-spacing:0.06em; margin-bottom:5px; }
+.benefit-text { font-size:13px; color:var(--w90); line-height:1.4; }
+.benefit-empty { color:var(--w50); }
+.option-input { width:100%; min-height:70px; background:var(--w05); border:0.5px solid var(--border); border-radius:10px; color:var(--w90); padding:11px 12px; resize:none; outline:none; font-size:13px; line-height:1.45; }
+.option-input:focus { border-color:var(--gold); }
 
 /* Market comp */
 .comp-item { display:flex; align-items:center; gap:10px; padding:10px 0; border-bottom:0.5px solid var(--border); }
@@ -381,6 +422,16 @@ html, body { height: 100%; background: var(--navy); font-family: -apple-system, 
 .market-search svg { width:15px; height:15px; stroke:var(--w50); fill:none; stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round; }
 .market-search span { color:var(--w30); font-size:13px; }
 .market-section { padding:14px; margin-top:2px; background:var(--navy3); }
+.market-controls { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:12px; }
+.market-control label { display:block; font-size:10px; font-weight:800; color:var(--w50); text-transform:uppercase; letter-spacing:0.05em; margin-bottom:5px; }
+.market-control input, .market-control select { width:100%; min-height:40px; background:var(--w05); border:0.5px solid var(--border); border-radius:10px; color:var(--white); padding:8px 10px; font-size:14px; outline:none; }
+.market-actions { display:flex; gap:8px; margin-bottom:12px; }
+.market-btn { flex:1; min-height:42px; border-radius:10px; border:0.5px solid var(--border); background:var(--w05); color:var(--w90); font-size:13px; font-weight:800; cursor:pointer; }
+.market-btn.primary { background:var(--gold); color:var(--navy); border:none; }
+.market-status { font-size:12px; color:var(--w50); line-height:1.5; background:var(--w05); border:0.5px solid var(--border); border-radius:10px; padding:11px; margin-bottom:12px; }
+.market-link-grid { display:grid; grid-template-columns:1fr; gap:8px; }
+.market-link { display:flex; align-items:center; justify-content:space-between; gap:10px; padding:12px; border-radius:10px; border:0.5px solid var(--border); background:var(--w05); color:var(--white); text-decoration:none; font-size:13px; font-weight:750; }
+.market-link span { color:var(--w50); font-size:11px; font-weight:650; }
 .market-empty { padding:40px 20px; text-align:center; }
 .market-empty svg { width:44px; height:44px; stroke:var(--w15); fill:none; stroke-width:1.5; stroke-linecap:round; stroke-linejoin:round; display:block; margin:0 auto 12px; }
 .market-empty p { font-size:14px; color:var(--w30); line-height:1.6; }
@@ -632,6 +683,8 @@ let camStream = null, torchOn = false;
 let scannedVin = '';
 let editMode = false;
 let isSpeaking = false;
+let currentPitchMode = 'walkaround';
+let currentPitchFocus = 'daily';
 const HK = 'keller_scout_v4';
 const CONFIG = window.KELLER_SCOUT_CONFIG || {};
 const API_TIMEOUT_MS = 12000;
@@ -718,19 +771,216 @@ function buildFeatureList(data, profile) {
   return [...new Set(features)].slice(0, 8);
 }
 
-function generateLocalPitch(v) {
-  const trim = v.trim ? ` ${v.trim}` : '';
-  const feature = (v.features || []).find(f => !/keller team/i.test(f)) || v.engine || v.body || 'a practical feature set';
-  return `This ${v.year} ${v.make} ${v.model}${trim} gives you ${feature} with the details ready to verify right here on the lot. Let me show you the mileage, window sticker, and options so you can see how it fits what you need.`;
+const PITCH_MODES = [
+  { id: 'walkaround', label: 'Talk Track' },
+  { id: 'value', label: 'Value' },
+  { id: 'feature', label: 'Features' },
+  { id: 'lifestyle', label: 'Lifestyle' },
+  { id: 'payment', label: 'Payment' },
+  { id: 'objection', label: 'Objection' },
+  { id: 'close', label: 'Close' },
+  { id: 'text', label: 'Text' }
+];
+
+const PITCH_FOCUSES = [
+  { id: 'daily', label: 'Daily' },
+  { id: 'family', label: 'Family' },
+  { id: 'work', label: 'Work' },
+  { id: 'budget', label: 'Budget' },
+  { id: 'trade', label: 'Trade' },
+  { id: 'performance', label: 'Power' }
+];
+
+function usefulFact(value) {
+  return value && !isPlaceholderValue(value) ? String(value).trim() : '';
+}
+
+function primaryFeature(v) {
+  return [...(v.options || []), ...(v.features || [])]
+    .map(f => String(f || '').replace(/^standard\s+/i, '').trim())
+    .find(f => f && !/keller team|verify|window sticker|not applicable/i.test(f))
+    || usefulFact(v.engine)
+    || usefulFact(v.body)
+    || usefulFact(v.drivetrain)
+    || 'a practical setup';
+}
+
+function strongestFacts(v) {
+  return [
+    usefulFact(v.drivetrain),
+    usefulFact(v.engine),
+    usefulFact(v.transmission),
+    usefulFact(v.body),
+    ...(v.options || []),
+    ...(v.features || []).filter(f => f && !/keller team|verify|window sticker|not applicable/i.test(f))
+  ].filter(Boolean).slice(0, 4);
+}
+
+function shortName(v) {
+  return `${v.year || ''} ${v.make || ''} ${v.model || ''}`.replace(/\s+/g, ' ').trim();
+}
+
+function fullName(v) {
+  return `${shortName(v)}${v.trim ? ' ' + v.trim : ''}`.replace(/\s+/g, ' ').trim();
+}
+
+function vehicleCategory(v) {
+  const body = String(v.body || '').toLowerCase();
+  const model = String(v.model || '').toLowerCase();
+  if (/truck|pickup|f-150|silverado|sierra|ram|tundra|tacoma|ranger/.test(body + ' ' + model)) return 'truck';
+  if (/suv|utility|explorer|escape|edge|expedition|bronco|cr-v|rav4|tahoe|suburban/.test(body + ' ' + model)) return 'suv';
+  if (/sedan|coupe|hatchback|mustang|camry|accord|civic|corolla/.test(body + ' ' + model)) return 'car';
+  return 'vehicle';
+}
+
+function categoryUse(v) {
+  const cat = vehicleCategory(v);
+  if (cat === 'truck') return 'work during the week and family duty on the weekend';
+  if (cat === 'suv') return 'daily driving, passengers, and cargo without feeling oversized';
+  if (cat === 'car') return 'easy commuting, parking, and everyday driving';
+  return 'daily driving without overcomplicating the decision';
+}
+
+function focusBenefit(v, focus = currentPitchFocus) {
+  const cat = vehicleCategory(v);
+  const map = {
+    daily: {
+      truck: 'something comfortable enough for every day but still useful when you need truck capability',
+      suv: 'something easy to live with every day, with room when life gets busy',
+      car: 'something simple to drive, easy to park, and easy to own',
+      vehicle: 'something that fits normal life without turning the purchase into a project'
+    },
+    family: {
+      truck: 'space for people plus the bed when weekends or projects come up',
+      suv: 'room, visibility, and flexibility for passengers and cargo',
+      car: 'a practical cabin and an easy drive for errands, school, and commuting',
+      vehicle: 'comfort and flexibility for the people who ride with you most'
+    },
+    work: {
+      truck: 'the kind of utility people buy a truck for in the first place',
+      suv: 'cargo flexibility and a professional daily driver in one package',
+      car: 'a clean, efficient way to get around for work without overbuying',
+      vehicle: 'a practical tool for getting through the week'
+    },
+    budget: {
+      truck: 'the right balance of capability and payment comfort',
+      suv: 'useful space without jumping into more vehicle than you need',
+      car: 'a sensible way to keep the payment and ownership costs in check',
+      vehicle: 'a decision that still has to make sense after the excitement wears off'
+    },
+    trade: {
+      truck: 'a meaningful upgrade from what you are driving now',
+      suv: 'a step into more room, comfort, or confidence than your current vehicle gives you',
+      car: 'a fresh start if your current vehicle is costing you time or money',
+      vehicle: 'a clean comparison against what you have now'
+    },
+    performance: {
+      truck: 'power and traction you can feel when you ask it to work',
+      suv: 'confident passing, merging, and bad-weather driving',
+      car: 'the feel from behind the wheel, not just the spec sheet',
+      vehicle: 'the way it feels when you drive it'
+    }
+  };
+  return (map[focus] || map.daily)[cat];
+}
+
+function discoveryQuestion(v, focus = currentPitchFocus) {
+  const questions = {
+    daily: 'What does a normal week of driving look like for you?',
+    family: 'Who is usually riding with you, and what do you need room for?',
+    work: 'What do you need the vehicle to do for work that your current one does not?',
+    budget: 'Are you trying to stay under a certain payment, or are you comparing total price first?',
+    trade: 'What are you hoping your next vehicle does better than your current one?',
+    performance: 'When you drive it, are you looking more for power, handling, towing confidence, or comfort?'
+  };
+  return questions[focus] || questions.daily;
+}
+
+function naturalFactsLine(v) {
+  const facts = strongestFacts(v);
+  if (!facts.length) return '';
+  if (facts.length === 1) return `The main thing to point out is ${facts[0]}.`;
+  return `The useful pieces to point out are ${facts.slice(0, -1).join(', ')}, and ${facts[facts.length - 1]}.`;
+}
+
+function combinedVehicleText(v) {
+  return [
+    v.year, v.make, v.model, v.trim, v.body, v.engine, v.drivetrain, v.transmission,
+    ...(v.features || []), ...(v.options || [])
+  ].join(' ').toLowerCase();
+}
+
+function benefitMap(v) {
+  const text = combinedVehicleText(v);
+  const has = pattern => pattern.test(text);
+  const cargo = vehicleCategory(v) === 'truck'
+    ? 'Bed utility for hauling gear, tools, weekend projects, or bulky cargo.'
+    : vehicleCategory(v) === 'suv'
+      ? 'Flexible passenger and cargo space for errands, trips, and family gear.'
+      : has(/hatch|cargo|fold|liftgate/)
+        ? 'Useful cargo flexibility for everyday errands and road trips.'
+        : '';
+  return [
+    { key:'comfort', label:'Comfort', text: [
+      has(/cooled|ventilated/) ? 'Cooled seats help on hot Central Valley days.' : '',
+      has(/heated seat|heated front/) ? 'Heated seats add comfort on cold mornings.' : '',
+      has(/leather|active.?x|limited|platinum|lariat|king ranch/) ? 'Upgraded seating materials make the cabin feel more premium.' : ''
+    ].filter(Boolean).join(' ') },
+    { key:'open', label:'Open Cabin', text: has(/sunroof|moonroof|panoramic/) ? 'Sunroof/moonroof gives the cabin a more open feel and is easy to show during the walkaround.' : '' },
+    { key:'cargo', label:'Cargo', text: cargo },
+    { key:'capability', label:'Capability', text: [
+      has(/4wd|4-wheel|4x4|awd/) ? 'Four-wheel/all-wheel drive adds confidence for weather, dirt roads, and weekend use.' : '',
+      has(/tow|trailer|hitch|payload|truck|pickup/) ? 'Truck capability gives you a natural towing and hauling conversation.' : '',
+      usefulFact(v.engine) ? `${usefulFact(v.engine)} is a concrete powertrain detail to point out.` : ''
+    ].filter(Boolean).join(' ') },
+    { key:'tech', label:'Tech', text: [
+      has(/carplay|android auto/) ? 'Apple CarPlay/Android Auto keeps phone, maps, and music familiar.' : '',
+      has(/touchscreen|sync|navigation|nav/) ? 'The screen/navigation setup is something customers can immediately try.' : '',
+      has(/remote start/) ? 'Remote start is an easy everyday convenience to demonstrate.' : ''
+    ].filter(Boolean).join(' ') },
+    { key:'safety', label:'Safety', text: [
+      has(/blind spot|blis/) ? 'Blind spot monitoring is a strong confidence feature.' : '',
+      has(/lane|collision|pre.?collision|adaptive cruise/) ? 'Driver-assist tech makes the vehicle feel more modern and reassuring.' : '',
+      has(/backup camera|rear camera/) ? 'Backup camera is practical and easy to show on the spot.' : ''
+    ].filter(Boolean).join(' ') }
+  ].filter(b => b.text);
+}
+
+function topBenefit(v) {
+  const benefits = benefitMap(v);
+  return benefits[0]?.text || primaryFeature(v);
+}
+
+function generateLocalPitch(v, mode = currentPitchMode, focus = currentPitchFocus) {
+  const name = fullName(v);
+  const feature = primaryFeature(v);
+  const benefit = topBenefit(v);
+  const engine = usefulFact(v.engine);
+  const drive = usefulFact(v.drivetrain);
+  const mileage = usefulFact(v.mileage);
+  const price = usefulFact(v.sale_price);
+  const priceLine = price ? ` It is listed at ${price}${mileage ? ` with ${mileage}` : ''}.` : mileage ? ` It shows ${mileage}.` : '';
+  const driveLine = [engine, drive].filter(Boolean).join(', ');
+  const buyerBenefit = focusBenefit(v, focus);
+  const question = discoveryQuestion(v, focus);
+  const factsLine = naturalFactsLine(v);
+
+  const pitches = {
+    walkaround: `"This ${name} is worth a closer look because ${benefit} Let's open it up and see how it feels from the driver's seat. ${question}"`,
+    value: `"${priceLine ? priceLine.trim() + ' ' : ''}The big thing is whether this ${shortName(v)} fits your life and your budget at the same time. If it feels right, we can compare it against the other options you are considering and make the numbers make sense."`,
+    feature: `"The thing I would pay attention to on this one is ${feature}. ${benefit} Which part matters more to you: comfort, space, tech, power, or payment?"`,
+    lifestyle: `"Picture this in your normal week. This ${name} makes sense if you want ${buyerBenefit}. Sit in it for a second and tell me what feels better or worse than what you drive now."`,
+    payment: `"Before we chase a payment, let's make sure this ${shortName(v)} is actually the right vehicle. If it is, we can work trade, down payment, term, and rate together so you know exactly where you stand."`,
+    objection: `"That's fair. Is your hesitation the vehicle itself, the price, the payment, or just wanting to compare one more option? Once I know that, I can help you decide if this ${shortName(v)} is still worth considering."`,
+    close: `"Based on what you told me, this ${shortName(v)} lines up because ${benefit.toLowerCase()} If the drive feels right and the numbers are comfortable, is this one you could see yourself moving forward with today?"`,
+    text: `${name}${price || mileage ? ` - ${[price, mileage].filter(Boolean).join(' | ')}` : ''}. I thought this one was worth sending because ${benefit.toLowerCase()} Take a look when you have a minute and I can send more photos or answer questions.`
+  };
+
+  return pitches[mode] || pitches.walkaround;
 }
 
 function buildComparables(v) {
-  const name = `${v.year} ${v.make} ${v.model}${v.trim ? ' ' + v.trim : ''}`.trim();
-  return [
-    { name, miles: 'Check odometer', price: 'Verify locally', delta: 'same' },
-    { name: `${v.year} ${v.make} ${v.model}`.trim(), miles: 'Similar inventory', price: 'Market search', delta: 'same' },
-    { name: `${v.make} ${v.model} alternatives`.trim(), miles: 'Nearby comps', price: 'Keller websites', delta: 'same' }
-  ];
+  return [];
 }
 
 function buildVehicleFromNhtsa(vin, data) {
@@ -1101,92 +1351,256 @@ async function doLookup() {
 }
 
 // ── Render result ──
+function displayValue(value, fallback = 'Verify on lot') {
+  return value && String(value).trim() ? String(value).trim() : fallback;
+}
+
+function isPlaceholderValue(value) {
+  return !value || /^(see window sticker|check odometer|verify.*|market search|keller websites|—)$/i.test(String(value).trim());
+}
+
+function vehicleName(v) {
+  return `${v.year || ''} ${v.make || ''} ${v.model || ''}${v.trim ? ' ' + v.trim : ''}`.replace(/\s+/g, ' ').trim();
+}
+
+function valueClass(value, extra = '') {
+  return `${extra} ${isPlaceholderValue(value) ? 'placeholder' : ''}`.trim();
+}
+
+function parseMoney(value) {
+  return parseFloat(String(value || '').replace(/[^0-9.]/g, '')) || 0;
+}
+
+function formatMoney(value) {
+  return '$' + Math.round(value || 0).toLocaleString();
+}
+
+function dealKey(vin) {
+  return 'deal_' + vin;
+}
+
+function loadDeal(v) {
+  const basePrice = parseMoney(v.sale_price);
+  const defaults = {
+    price: basePrice || '',
+    down: 2000,
+    trade: 0,
+    rate: 7.9,
+    term: 72,
+    tax: 8.25,
+    fees: 995
+  };
+  try {
+    return { ...defaults, ...JSON.parse(localStorage.getItem(dealKey(v.vin)) || '{}') };
+  } catch {
+    return defaults;
+  }
+}
+
+function saveDeal() {
+  if (!cv) return;
+  const deal = readDealInputs();
+  try { localStorage.setItem(dealKey(cv.vin), JSON.stringify(deal)); } catch {}
+}
+
+function readDealInputs() {
+  const val = id => document.getElementById(id)?.value || '';
+  return {
+    price: parseMoney(val('dealPrice')),
+    down: parseMoney(val('dealDown')),
+    trade: parseMoney(val('dealTrade')),
+    rate: parseFloat(val('dealRate')) || 0,
+    term: parseInt(val('dealTerm'), 10) || 72,
+    tax: parseFloat(val('dealTax')) || 0,
+    fees: parseMoney(val('dealFees'))
+  };
+}
+
+function calculatePayment(deal) {
+  const taxable = Math.max(0, deal.price - deal.trade);
+  const taxAmount = taxable * (deal.tax / 100);
+  const financed = Math.max(0, taxable + taxAmount + deal.fees - deal.down);
+  if (!deal.term) return { financed, payment: 0, taxAmount };
+  if (!deal.rate) return { financed, payment: financed / deal.term, taxAmount };
+  const monthlyRate = deal.rate / 100 / 12;
+  const payment = financed * (monthlyRate * Math.pow(1 + monthlyRate, deal.term)) / (Math.pow(1 + monthlyRate, deal.term) - 1);
+  return { financed, payment, taxAmount };
+}
+
+function renderPitchModeButtons() {
+  return `<div class="pitch-modes">${PITCH_MODES.map(mode => `
+    <button class="pitch-mode ${mode.id === currentPitchMode ? 'active' : ''}" data-pitch-mode="${mode.id}" onclick="setPitchMode('${mode.id}')">${mode.label}</button>
+  `).join('')}</div>`;
+}
+
+function updatePitchModeButtons() {
+  document.querySelectorAll('.pitch-mode').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.pitchMode === currentPitchMode);
+  });
+}
+
+function renderPitchFocusButtons() {
+  return `<div class="pitch-focus-label">Customer angle</div><div class="pitch-focuses">${PITCH_FOCUSES.map(focus => `
+    <button class="pitch-focus ${focus.id === currentPitchFocus ? 'active' : ''}" data-pitch-focus="${focus.id}" onclick="setPitchFocus('${focus.id}')">${focus.label}</button>
+  `).join('')}</div>`;
+}
+
+function updatePitchFocusButtons() {
+  document.querySelectorAll('.pitch-focus').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.pitchFocus === currentPitchFocus);
+  });
+}
+
+function setPitchMode(mode) {
+  if (!cv) return;
+  currentPitchMode = mode;
+  const pitch = generateLocalPitch(cv, mode, currentPitchFocus);
+  cv.pitch = pitch;
+  streamPitch(pitch);
+  updatePitchModeButtons();
+  updatePitchFocusButtons();
+}
+
+function setPitchFocus(focus) {
+  if (!cv) return;
+  currentPitchFocus = focus;
+  const pitch = generateLocalPitch(cv, currentPitchMode, focus);
+  cv.pitch = pitch;
+  streamPitch(pitch);
+  updatePitchModeButtons();
+  updatePitchFocusButtons();
+}
+
+function nextPitchMode() {
+  const index = PITCH_MODES.findIndex(mode => mode.id === currentPitchMode);
+  return PITCH_MODES[(index + 1 + PITCH_MODES.length) % PITCH_MODES.length].id;
+}
+
+function renderBenefitCards(v) {
+  const benefits = benefitMap(v);
+  if (!benefits.length) {
+    return `<div class="benefit-card" style="grid-column:1/-1;"><div class="benefit-label">Needs options</div><div class="benefit-text benefit-empty">Paste listing options below to unlock vehicle-specific benefits like cooled seats, sunroof, cargo space, towing, safety tech, and packages.</div></div>`;
+  }
+  return benefits.slice(0, 4).map(b => `
+    <div class="benefit-card"><div class="benefit-label">${b.label}</div><div class="benefit-text">${b.text}</div></div>
+  `).join('');
+}
+
+function optionsText(v) {
+  return (v.options || []).join(', ');
+}
+
+function updateVehicleOptions() {
+  if (!cv) return;
+  const raw = document.getElementById('optionInput')?.value || '';
+  cv.options = raw.split(/[,;\n]+/).map(x => x.trim()).filter(Boolean);
+  cv.features = [...new Set([...(cv.features || []), ...cv.options])];
+  cv.pitch = generateLocalPitch(cv, currentPitchMode, currentPitchFocus);
+  saveHistory(cv);
+  renderResult(cv);
+  renderMarket(cv);
+}
+
 function renderResult(v) {
   const savings = calcSavings(v.retail_price, v.sale_price);
+  const name = vehicleName(v);
+  const salePrice = displayValue(v.sale_price, 'Verify price');
+  const mileage = displayValue(v.mileage, 'Verify mileage');
+  const drivetrain = displayValue(v.drivetrain);
+  const engine = displayValue(v.engine);
+  const transmission = displayValue(v.transmission);
+  const stock = displayValue(v.stock, 'Verify stock');
+  const owners = v.owners ? `${v.owners}-owner` : 'Verify';
+  const deal = loadDeal(v);
   const html = `
-    <div class="result-hero">
-      <div class="result-hero-car">
-        <svg viewBox="0 0 80 40"><path d="M10 28l5-15h50l5 15"/><rect x="6" y="28" width="68" height="10" rx="3"/><circle cx="18" cy="38" r="5"/><circle cx="62" cy="38" r="5"/><rect x="16" y="14" width="18" height="10" rx="2"/><rect x="36" y="13" width="20" height="11" rx="2"/></svg>
-      </div>
-      <div class="result-hero-overlay"></div>
-      <div class="result-hero-btns">
-        <button class="hero-btn" onclick="showTab('scan')"><svg viewBox="0 0 24 24"><path d="M19 12H5M12 5l-7 7 7 7"/></svg></button>
-        <a class="hero-listing-btn" href="${v.listing_url}" target="_blank">
+    <div class="coach-hero">
+      <div class="coach-top">
+        <button class="coach-back" onclick="showTab('scan')" aria-label="Back to scan"><svg viewBox="0 0 24 24"><path d="M19 12H5M12 5l-7 7 7 7"/></svg></button>
+        <div class="coach-status">${(v.badges||[]).includes('Keller Inventory') ? 'Keller inventory' : 'Decoded VIN'}</div>
+        <a class="coach-listing" href="${v.listing_url}" target="_blank">
           <svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-          Find Listing
+          Listing
         </a>
+      </div>
+      <div class="coach-title">${name}</div>
+      <div class="coach-vin">${v.vin}</div>
+      <div class="coach-facts">
+        <div class="coach-fact"><div class="coach-fact-label">Price</div><div class="${valueClass(salePrice, 'coach-fact-value price')}">${salePrice}</div></div>
+        <div class="coach-fact"><div class="coach-fact-label">Mileage</div><div class="${valueClass(mileage, 'coach-fact-value')}">${mileage}</div></div>
       </div>
     </div>
 
     <div class="result-body">
-      <div class="r-badges">
-        ${(v.badges||[]).map(b=>`<span class="r-badge r-badge-gold">${b}</span>`).join('')}
+      <div class="pitch-card">
+        <div class="pitch-eyebrow">Use on the lot</div>
+        <div class="pitch-bubble" id="pitchBubble"></div>
+        ${renderPitchModeButtons()}
+        ${renderPitchFocusButtons()}
+        <div class="pitch-focus-label">Vehicle benefits</div>
+        <div class="benefit-grid">${renderBenefitCards(v)}</div>
+        <div class="quick-actions">
+          <button class="quick-action primary" onclick="speakPitch()" id="speechBtn">
+            <svg viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+            Read Aloud
+          </button>
+          <button class="quick-action secondary" onclick="copyPitch()">
+            <svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            Copy
+          </button>
+          <button class="quick-action secondary" onclick="sendPitchText()">
+            <svg viewBox="0 0 24 24"><path d="M21 15a4 4 0 0 1-4 4H7l-4 4V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4z"/></svg>
+            Text
+          </button>
+          <button class="quick-action secondary" onclick="sendPitchEmail()">
+            <svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 6L2 7"/></svg>
+            Email
+          </button>
+          <button class="quick-action secondary wide" onclick="shareVehicle()">
+            <svg viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+            Share Full Vehicle Summary
+          </button>
+        </div>
       </div>
-      <div class="r-ymmt">${v.year} ${v.make} ${v.model}<br>${v.trim}</div>
-      <div class="r-vin">VIN: ${v.vin}</div>
-      <div class="r-price-row">
-        <span class="r-price">${v.sale_price}</span>
-        ${v.retail_price && v.retail_price!==v.sale_price?`<span class="r-retail">${v.retail_price}</span>`:''}
-        ${savings?`<span class="r-save">Save ${savings}</span>`:''}
-      </div>
-      <div class="r-stats">
-        <div class="r-stat"><div class="r-stat-label">Mileage</div><div class="r-stat-val">${v.mileage}</div></div>
-        <div class="r-stat"><div class="r-stat-label">Engine</div><div class="r-stat-val">${v.engine}</div></div>
-        <div class="r-stat"><div class="r-stat-label">Drivetrain</div><div class="r-stat-val">${v.drivetrain}</div></div>
-        <div class="r-stat"><div class="r-stat-label">Transmission</div><div class="r-stat-val">${v.transmission}</div></div>
-        <div class="r-stat"><div class="r-stat-label">Exterior</div><div class="r-stat-val">${v.exterior_color}</div></div>
-        <div class="r-stat"><div class="r-stat-label">Interior</div><div class="r-stat-val">${v.interior_color}</div></div>
-        <div class="r-stat"><div class="r-stat-label">Owners</div><div class="r-stat-val">${v.owners ? `${v.owners}-owner` : 'Verify'}</div></div>
-        <div class="r-stat"><div class="r-stat-label">Stock #</div><div class="r-stat-val">${v.stock||'—'}</div></div>
-      </div>
-    </div>
 
-    <!-- PITCH -->
-    <div class="r-section">
-      <div class="r-sec-hdr">
-        <span class="r-sec-title">Sales Pitch</span>
-        <button class="r-sec-btn" onclick="regeneratePitch()">Regenerate</button>
+      <div class="detail-strip">
+        <div class="detail-pill"><div class="detail-pill-label">Engine</div><div class="${valueClass(engine, 'detail-pill-value')}">${engine}</div></div>
+        <div class="detail-pill"><div class="detail-pill-label">Drive</div><div class="${valueClass(drivetrain, 'detail-pill-value')}">${drivetrain}</div></div>
+        <div class="detail-pill"><div class="detail-pill-label">Transmission</div><div class="${valueClass(transmission, 'detail-pill-value')}">${transmission}</div></div>
+        <div class="detail-pill"><div class="detail-pill-label">Stock</div><div class="${valueClass(stock, 'detail-pill-value')}">${stock}</div></div>
+        <div class="detail-pill"><div class="detail-pill-label">Owners</div><div class="${valueClass(owners, 'detail-pill-value')}">${owners}</div></div>
       </div>
-      <div class="pitch-bubble" id="pitchBubble"></div>
-      <div class="pitch-btns">
-        <button class="pitch-btn pitch-btn-outline" onclick="copyPitch()">
-          <svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
-          Copy
-        </button>
-        <button class="pitch-btn pitch-btn-solid" onclick="shareVehicle()">
-          <svg viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
-          Share to Customer
-        </button>
+
+      <div class="r-section">
+        <div class="r-sec-hdr">
+          <span class="r-sec-title">Options & Benefits</span>
+          <button class="r-sec-btn" onclick="regeneratePitch()">Regenerate</button>
+        </div>
+        <textarea class="option-input" id="optionInput" placeholder="Paste listing/window sticker options here: cooled seats, panoramic sunroof, 302A package, tow package, leather, CarPlay..." onblur="updateVehicleOptions()">${optionsText(v)}</textarea>
+        <div class="est-note">Tip: the more real options you add, the more specific and natural the pitch becomes.</div>
+        <div class="r-badges">
+          ${(v.badges||[]).map(b=>`<span class="r-badge r-badge-gold">${b}</span>`).join('')}
+          ${savings?`<span class="r-badge r-badge-teal">Save ${savings}</span>`:''}
+        </div>
       </div>
-      <button class="speech-btn" id="speechBtn" onclick="speakPitch()">
-        <svg viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
-        Read Pitch Aloud
-      </button>
-    </div>
 
     <!-- PAYMENT ESTIMATOR -->
     <div class="r-section">
       <div class="r-sec-hdr"><span class="r-sec-title">Payment Estimator</span></div>
       <div class="estimator">
-        <div class="est-row">
-          <span class="est-label">Down</span>
-          <input class="est-slider" type="range" id="estDown" min="0" max="10000" step="500" value="2000" oninput="calcPayment()">
-          <span class="est-val" id="estDownVal">$2,000</span>
-        </div>
-        <div class="est-row">
-          <span class="est-label">Rate</span>
-          <input class="est-slider" type="range" id="estRate" min="3" max="18" step="0.5" value="7" oninput="calcPayment()">
-          <span class="est-val" id="estRateVal">7.0%</span>
-        </div>
-        <div class="est-row" style="margin-bottom:12px;">
-          <span class="est-label">Term</span>
-          <input class="est-slider" type="range" id="estTerm" min="24" max="84" step="12" value="60" oninput="calcPayment()">
-          <span class="est-val" id="estTermVal">60 mo</span>
+        <div class="est-grid">
+          <div class="est-field"><label class="est-label" for="dealPrice">Sale price</label><input class="est-input" id="dealPrice" inputmode="decimal" value="${deal.price || ''}" placeholder="Enter price" oninput="calcPayment()"></div>
+          <div class="est-field"><label class="est-label" for="dealDown">Down</label><input class="est-input" id="dealDown" inputmode="decimal" value="${deal.down}" oninput="calcPayment()"></div>
+          <div class="est-field"><label class="est-label" for="dealTrade">Trade equity</label><input class="est-input" id="dealTrade" inputmode="decimal" value="${deal.trade}" oninput="calcPayment()"></div>
+          <div class="est-field"><label class="est-label" for="dealRate">APR %</label><input class="est-input" id="dealRate" inputmode="decimal" value="${deal.rate}" oninput="calcPayment()"></div>
+          <div class="est-field"><label class="est-label" for="dealTerm">Term</label><input class="est-input" id="dealTerm" inputmode="numeric" value="${deal.term}" oninput="calcPayment()"></div>
+          <div class="est-field"><label class="est-label" for="dealTax">Tax %</label><input class="est-input" id="dealTax" inputmode="decimal" value="${deal.tax}" oninput="calcPayment()"></div>
+          <div class="est-field"><label class="est-label" for="dealFees">Fees</label><input class="est-input" id="dealFees" inputmode="decimal" value="${deal.fees}" oninput="calcPayment()"></div>
         </div>
         <div class="est-result">
           <div><div class="est-result-label">Est. monthly payment</div></div>
-          <div><div class="est-result-num" id="estPayment">$—</div><div class="est-result-sub">Principal + interest</div></div>
+          <div><div class="est-result-num" id="estPayment">$—</div><div class="est-result-sub" id="estPaymentSub">Before warranties/add-ons</div></div>
         </div>
+        <div class="est-note">Estimate only. Uses entered sale price, trade equity, tax, fees, down payment, APR, and term.</div>
       </div>
     </div>
 
@@ -1196,6 +1610,16 @@ function renderResult(v) {
       <div class="r-sec-hdr"><span class="r-sec-title">Key Features</span></div>
       <div class="feat-list">${v.features.map(f=>`<div class="feat-row"><div class="feat-bullet"></div><div class="feat-text">${f}</div></div>`).join('')}</div>
     </div>`:''}
+
+    <div class="r-section">
+      <div class="r-sec-hdr"><span class="r-sec-title">Vehicle Details</span></div>
+      <div class="r-stats">
+        <div class="r-stat"><div class="r-stat-label">Exterior</div><div class="r-stat-val">${displayValue(v.exterior_color)}</div></div>
+        <div class="r-stat"><div class="r-stat-label">Interior</div><div class="r-stat-val">${displayValue(v.interior_color)}</div></div>
+        <div class="r-stat"><div class="r-stat-label">VIN</div><div class="r-stat-val">${v.vin}</div></div>
+        <div class="r-stat"><div class="r-stat-label">Stock #</div><div class="r-stat-val">${stock}</div></div>
+      </div>
+    </div>
 
     <!-- DEAL NOTES -->
     <div class="r-section">
@@ -1210,40 +1634,99 @@ function renderResult(v) {
       <div class="listing-cta-text"><strong>Search Keller Websites</strong><span>Find this VIN on kellerusedcar.com &amp; kellerfordhanford.com</span></div>
       <div class="listing-cta-arrow"><svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg></div>
     </a>
+    </div>
     <div style="height:8px;"></div>`;
 
   document.getElementById('resultContent').innerHTML = html;
-  streamPitch(v.pitch||'');
+  streamPitch(v.pitch || generateLocalPitch(v, currentPitchMode, currentPitchFocus));
+  updatePitchModeButtons();
+  updatePitchFocusButtons();
   calcPayment();
 }
 
 // ── Market page ──
 function renderMarket(v) {
-  if (!v||!v.comparables||!v.comparables.length) return;
-  const comps = v.comparables.map(c=>{
-    const cls = c.delta==='lower'?'comp-delta-low':c.delta==='higher'?'comp-delta-high':'comp-delta-same';
-    const label = c.delta==='lower'?'↓ Priced lower':c.delta==='higher'?'↑ Priced higher':'≈ Similar';
-    return `<div class="comp-item">
-      <div class="comp-info"><div class="comp-name">${c.name}</div><div class="comp-detail">${c.miles}</div></div>
-      <div class="comp-right"><div class="comp-price">${c.price}</div><div class="comp-delta ${cls}">${label}</div></div>
-    </div>`;
-  }).join('');
-
-  document.getElementById('marketContent').innerHTML = `
-    <div class="r-sec-hdr" style="margin-bottom:12px;">
-      <span class="sec-label">Comps for ${v.year} ${v.make} ${v.model}</span>
-    </div>
-    ${comps}
-    <div style="margin-top:14px;padding:12px 14px;background:var(--w05);border:0.5px solid var(--border);border-radius:10px;">
-      <div style="font-size:11px;color:var(--w50);margin-bottom:4px;text-transform:uppercase;letter-spacing:0.06em;font-weight:600;">Keller asking price</div>
-      <div style="font-size:20px;font-weight:800;color:var(--gold);">${v.sale_price}</div>
-      ${v.retail_price&&v.retail_price!==v.sale_price?`<div style="font-size:12px;color:var(--w30);margin-top:2px;">Market retail: <span style="text-decoration:line-through">${v.retail_price}</span></div>`:''}
-    </div>`;
-
-  // Update market hero
-  document.querySelector('#market-page .market-hero p').textContent = `Showing comps for ${v.year} ${v.make} ${v.model} ${v.trim}`;
+  if (!v) return;
+  const zip = localStorage.getItem('market_zip') || '93230';
+  const radius = localStorage.getItem('market_radius') || '100';
+  document.querySelector('#market-page .market-hero p').textContent = `Regional comps for ${vehicleName(v)}`;
   document.querySelector('#market-page .market-search').onclick = () => showTab('result');
-  document.querySelector('#market-page .market-search span').textContent = `Back to ${v.year} ${v.make} ${v.model}`;
+  document.querySelector('#market-page .market-search span').textContent = `Back to ${vehicleName(v)}`;
+  document.getElementById('marketContent').innerHTML = `
+    <div class="market-controls">
+      <div class="market-control"><label for="marketZip">ZIP</label><input id="marketZip" inputmode="numeric" value="${zip}" oninput="saveMarketPrefs()"></div>
+      <div class="market-control"><label for="marketRadius">Radius</label><select id="marketRadius" onchange="saveMarketPrefs()">
+        ${['25','50','100','150','250'].map(r=>`<option value="${r}" ${r===radius?'selected':''}>${r} mi</option>`).join('')}
+      </select></div>
+    </div>
+    <div class="market-actions">
+      <button class="market-btn primary" onclick="refreshMarket()">Update Market</button>
+      <button class="market-btn" onclick="openMarketSearch()">Search Web</button>
+    </div>
+    <div class="market-status" id="marketStatus">Market pricing requires live inventory data. Connect <code>CONFIG.marketEndpoint</code> for verified regional comps; until then, use the search links below and avoid quoting unverified prices.</div>
+    <div id="marketComps">${renderMarketComps(v.market_comps || [])}</div>
+    <div class="market-link-grid">${renderMarketLinks(v)}</div>`;
+}
+
+function saveMarketPrefs() {
+  const zip = document.getElementById('marketZip')?.value || '93230';
+  const radius = document.getElementById('marketRadius')?.value || '100';
+  localStorage.setItem('market_zip', zip);
+  localStorage.setItem('market_radius', radius);
+}
+
+function marketQuery(v) {
+  return encodeURIComponent(`${v.year} ${v.make} ${v.model} ${v.trim || ''} used near ${localStorage.getItem('market_zip') || '93230'}`);
+}
+
+function renderMarketLinks(v) {
+  const q = marketQuery(v);
+  return [
+    ['Google regional search', `https://www.google.com/search?q=${q}`, 'Fast broad check'],
+    ['Keller VIN/listing search', v.listing_url || `https://www.google.com/search?q=${encodeURIComponent(v.vin)}`, 'Dealer listing'],
+    ['AutoTrader search', `https://www.autotrader.com/cars-for-sale/all-cars/${encodeURIComponent(v.make || '')}/${encodeURIComponent(v.model || '')}`, 'Retail comps'],
+    ['Cars.com search', `https://www.cars.com/shopping/results/?keyword=${q}`, 'Retail comps']
+  ].map(([label, href, sub]) => `<a class="market-link" href="${href}" target="_blank">${label}<span>${sub}</span></a>`).join('');
+}
+
+function renderMarketComps(comps) {
+  if (!comps.length) return '';
+  return comps.map(c => `
+    <div class="comp-item">
+      <div class="comp-info"><div class="comp-name">${c.name || 'Comparable vehicle'}</div><div class="comp-detail">${c.miles || ''} ${c.distance ? '· ' + c.distance : ''}</div></div>
+      <div class="comp-right"><div class="comp-price">${c.price || 'Verify'}</div><div class="comp-delta comp-delta-same">${c.source || 'Market'}</div></div>
+    </div>
+  `).join('');
+}
+
+async function refreshMarket() {
+  if (!cv) return;
+  saveMarketPrefs();
+  const status = document.getElementById('marketStatus');
+  if (status) status.textContent = 'Checking regional market...';
+  if (!CONFIG.marketEndpoint) {
+    if (status) status.textContent = 'No market backend is configured yet. Use Search Web for now; production should connect a real inventory/comps provider.';
+    return;
+  }
+  try {
+    const zip = localStorage.getItem('market_zip') || '93230';
+    const radius = localStorage.getItem('market_radius') || '100';
+    const data = await fetchJsonWithTimeout(CONFIG.marketEndpoint, {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({ vehicle: cv, zip, radius })
+    });
+    cv.market_comps = data.comps || [];
+    saveHistory(cv);
+    renderMarket(cv);
+  } catch(e) {
+    if (status) status.textContent = 'Market lookup failed. Check the provider connection and try again.';
+  }
+}
+
+function openMarketSearch() {
+  if (!cv) return;
+  window.open(`https://www.google.com/search?q=${marketQuery(cv)}`, '_blank');
 }
 
 // ── Pitch streaming ──
@@ -1268,18 +1751,16 @@ async function regeneratePitch() {
   if (!cv) return;
   const box=document.getElementById('pitchBubble');
   if (box) box.innerHTML='<span class="pitch-cursor"></span>';
-  const fallbackPitch = generateLocalPitch({
-    ...cv,
-    pitch: '',
-    features: [...(cv.features || [])].reverse()
-  });
+  currentPitchMode = nextPitchMode();
+  updatePitchModeButtons();
+  const fallbackPitch = generateLocalPitch(cv, currentPitchMode, currentPitchFocus);
   try {
     let pitch = fallbackPitch;
     if (CONFIG.pitchEndpoint) {
       const data = await fetchJsonWithTimeout(CONFIG.pitchEndpoint, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ vehicle: cv })
+        body: JSON.stringify({ vehicle: cv, mode: currentPitchMode, focus: currentPitchFocus })
       });
       pitch = data.pitch || pitch;
     }
@@ -1315,19 +1796,21 @@ function setSpeaking(on) {
 // ── Payment estimator ──
 function calcPayment() {
   if (!cv) return;
-  const priceStr = cv.sale_price||'0';
-  const price = parseInt(priceStr.replace(/[^0-9]/g,''))||0;
-  const down = parseInt(document.getElementById('estDown').value)||0;
-  const rate = parseFloat(document.getElementById('estRate').value)||7;
-  const term = parseInt(document.getElementById('estTerm').value)||60;
-  document.getElementById('estDownVal').textContent = '$'+down.toLocaleString();
-  document.getElementById('estRateVal').textContent = rate.toFixed(1)+'%';
-  document.getElementById('estTermVal').textContent = term+' mo';
-  const principal = Math.max(0, price - down);
-  if (principal===0||rate===0) { document.getElementById('estPayment').textContent='$'+Math.round(principal/term).toLocaleString(); return; }
-  const r = rate/100/12;
-  const payment = principal*(r*Math.pow(1+r,term))/(Math.pow(1+r,term)-1);
-  document.getElementById('estPayment').textContent = '$'+Math.round(payment).toLocaleString();
+  const out = document.getElementById('estPayment');
+  const sub = document.getElementById('estPaymentSub');
+  if (!out) return;
+  const deal = readDealInputs();
+  if (deal.price) cv.sale_price = formatMoney(deal.price);
+  saveDeal();
+  saveHistory(cv);
+  if (!deal.price) {
+    out.textContent = '$—';
+    if (sub) sub.textContent = 'Enter sale price to estimate';
+    return;
+  }
+  const result = calculatePayment(deal);
+  out.textContent = formatMoney(result.payment);
+  if (sub) sub.textContent = `${formatMoney(result.financed)} financed · ${deal.term} mo`;
 }
 
 // ── Notes ──
@@ -1347,10 +1830,34 @@ function copyPitch() {
     .then(()=>showToast('Pitch copied!'))
     .catch(()=>{const t=document.createElement('textarea');t.value=cv.pitch;document.body.appendChild(t);t.select();document.execCommand('copy');document.body.removeChild(t);showToast('Pitch copied!');});
 }
+
+function customerMessage() {
+  if (!cv) return '';
+  const pitch = currentPitchMode === 'text' ? generateLocalPitch(cv, 'text', currentPitchFocus) : (cv.pitch || '');
+  const name = vehicleName(cv);
+  const price = isPlaceholderValue(cv.sale_price) ? '' : `${cv.sale_price} · `;
+  const miles = isPlaceholderValue(cv.mileage) ? '' : cv.mileage;
+  const details = [price + miles, cv.listing_url || ''].filter(Boolean).join('\n');
+  return `${name}\n${details ? details + '\n\n' : ''}${pitch}`.trim();
+}
+
+function sendPitchText() {
+  const body = encodeURIComponent(customerMessage());
+  const separator = /iPad|iPhone|iPod/i.test(navigator.userAgent) ? '&' : '?';
+  window.location.href = `sms:${separator}body=${body}`;
+}
+
+function sendPitchEmail() {
+  if (!cv) return;
+  const subject = encodeURIComponent(`${vehicleName(cv)} at Keller`);
+  const body = encodeURIComponent(customerMessage());
+  window.location.href = `mailto:?subject=${subject}&body=${body}`;
+}
+
 function shareVehicle() {
   if (!cv) return;
-  const text=`${cv.year} ${cv.make} ${cv.model} ${cv.trim}\n${cv.sale_price} · ${cv.mileage}\n\n${cv.pitch||''}\n\n${cv.listing_url||''}`;
-  if (navigator.share) navigator.share({title:`${cv.year} ${cv.make} ${cv.model}`,text,url:cv.listing_url||''});
+  const text = customerMessage();
+  if (navigator.share) navigator.share({title: vehicleName(cv), text, url: cv.listing_url||''});
   else navigator.clipboard.writeText(text).then(()=>showToast('Details copied!'));
 }
 
